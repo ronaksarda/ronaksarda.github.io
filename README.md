@@ -1,34 +1,45 @@
-# Ronak Sarda - Personal Portfolio
+# Ronak Sarda
+Software Developer | Undergraduate Student
 
-A professional, responsive, and minimalist developer portfolio showcasing skills, projects, and competitive programming achievements. Designed with an elegant, modern aesthetic commonly found in high-end tech profiles (e.g., FAANG/tier-1 companies).
+Focused on building robust backend architectures, high-performance systems in C/C++, and scalable full-stack web applications. I specialize in system-level programming and algorithmic efficiency.
 
-## Features
+## 🚀 Technical Arsenal
 
-- **True Dark/Light Mode**: Seamless toggle between a pitch-dark theme and a clean light theme using CSS variables and local storage.
-- **Responsive Layout**: Fluidly adapts to mobile, tablet, and desktop screens using modern CSS Grid and Flexbox.
-- **Minimalist Aesthetics**: Content-first approach without excessive animations, heavy glassmorphism, or "fake hype".
-- **Zero Dependencies**: Built entirely with plain HTML, CSS, and vanilla JavaScript. No complex build tools or frameworks required.
+- **Languages**: C, C++, Python (Flask, OpenCV), JavaScript (Vanilla)
+- **Web Technologies**: HTML5, CSS3, REST APIs
+- **Databases**: MySQL, Firebase
+- **Tools & Platforms**: Git, Linux Shell, Arduino IDE, Google AntiGravity / Claude Code
 
-## Tech Stack
+## 🛠️ Featured Work
 
-- **HTML5**: Semantic document structure.
-- **CSS3**: Custom properties (variables), Grid, Flexbox, and responsive media queries.
-- **Vanilla JavaScript**: Lightweight script for theme toggling.
-- **Typography**: Uses the robust `Inter` font for clean readability, along with monospace fallback for technical badges.
+### [InstantDRS](https://github.com/ronaksarda/InstantDRS)
+**Tech Stack**: Python, Flask
+An emergency response system designed to handle live queue processing and multimodal triage during critical situations. 
+- [Live Site](https://instantdrs.onrender.com/)
 
-## How to Run
+### [Vault](https://github.com/ronaksarda/Vault)
+**Tech Stack**: C
+A C-based file operating system focused on core file management, structure, and low-level system operations.
 
-Because this is a static site with no build steps, you can run it immediately:
+### High-Performance Engine
+**Tech Stack**: C++
+Currently developing a core systems application utilizing modern C++ memory management and execution optimization techniques. *(In Development)*
 
-1. Clone the repository or download the files.
-2. Double-click the `index.html` file to open it in your default web browser.
+## 🏆 Competitive Programming
 
-## Deployment
+Consistent problem solver focused on Data Structures and Algorithms. Actively refining algorithmic efficiency logic on LeetCode.
+- **LeetCode Profile**: [ronnie0524](https://leetcode.com/ronnie0524/)
 
-This portfolio is ready to be deployed to any static hosting provider. The easiest option is **GitHub Pages**:
+## 📫 Let's Connect
 
-1. Push this directory to a public GitHub repository.
-2. Go to the repository **Settings** > **Pages**.
-3. Under **Build and deployment**, select **Deploy from a branch**.
-4. Choose the `main` branch and the `/ (root)` folder.
-5. Save. Your site will be live in a few minutes!
+I'm always open to discussing system architecture, software engineering roles, or new projects.
+
+- **Email**: [rockysarda18@gmail.com](mailto:rockysarda18@gmail.com)
+- **LinkedIn**: [ronak-sarda05](https://www.linkedin.com/in/ronak-sarda05/)
+- **GitHub**: [@ronaksarda](https://github.com/ronaksarda)
+
+---
+
+> [!NOTE]
+> This repository contains the source code for my personal portfolio website. 
+> To view the live version, visit: [ronaksarda.github.io/portfolio](https://ronaksarda.github.io/portfolio/) (or your deployed link)
