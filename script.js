@@ -428,7 +428,7 @@ building cool things from scratch.`),
         skills: () => print(S.stack.map(r => '› ' + r.join(' · ')).join('\n')),
         wins: () => print(S.trophies.map(t => `${t.ico} <span class="c5">${t.big.padEnd(7)}</span>${t.title}`).join('\n')),
         journey: () => print(`<span class="c3">2026 →</span> Founding AI Engineering Intern, FschoolAI
-<span class="c3">2026  </span> Technical member, HICON &amp; AWS Club CBIT
+<span class="c3">2026  </span> Technical member, HICON &amp; AWS Club CBIT · GDG Hyderabad
 <span class="c3">2025 →</span> B.E. IT, CBIT Hyderabad`),
         resume: () => { print('<span class="c3">↓ downloading Ronak_Sarda_Resume.pdf…</span>'); const a = document.createElement('a'); a.href = 'assets/resume/Ronak_Sarda_Resume.pdf'; a.download = ''; a.click(); },
         contact: () => print(`email   <a href="mailto:rockysarda18@gmail.com">rockysarda18@gmail.com</a>

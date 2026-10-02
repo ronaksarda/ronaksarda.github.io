@@ -126,6 +126,8 @@ window.SITE = {
         { ico: '🏅', big: 'Top 7', title: 'CBIT COSC HackWeek', text: 'Top 7 out of 2,500+ participants.' },
         { ico: '🎤', big: 'Top 10', title: 'AB Talks ViCoDathon 2026', text: "India's AI vibe-coding hackathon.", cert: 'abtalks' },
         { ico: '🌐', big: 'Top 500', title: "ECSoC '26", text: 'Top 500 of 13,000+ in Elite Coders Summer of Code.', cert: 'ecsoc-appreciation' },
+        { ico: '📈', big: 'R2', title: 'Citadel Securities', text: 'Reached the 2nd interview round (DSA) as a first-year.' },
+        { ico: '🎨', big: 'R2', title: 'Adobe University Hackathon', text: 'Qualified for Round 2.' },
         { ico: '🔐', big: 'R2', title: 'COOL Reverse Hackathon', text: 'Qualified for Round 2.', cert: 'reverse-hackathon' },
         { ico: '🌍', big: '2026', title: 'Google Solution Challenge', text: 'Build with AI prototype submission (Hack2Skill).', cert: 'solution-challenge' },
         { ico: '🧱', big: 'OSS', title: '7Blocks · Kepler', text: 'Contribution certificate for the open-source Kepler platform.', cert: '7B' },
