@@ -1,45 +1,23 @@
-# Ronak Sarda
-Software Developer | Undergraduate Student
+# ronaksarda.github.io
 
-Focused on building robust backend architectures, high-performance systems in C/C++, and scalable full-stack web applications. I specialize in system-level programming and algorithmic efficiency.
+Personal site of **Ronak Sarda**: Founding AI Engineering Intern @ FschoolAI, B.E. IT @ CBIT Hyderabad (class of 2029).
 
-## 🚀 Technical Arsenal
+Live: **https://ronaksarda.github.io**
 
-- **Languages**: C, C++, Python (Flask, OpenCV), JavaScript (Vanilla)
-- **Web Technologies**: HTML5, CSS3, REST APIs
-- **Databases**: MySQL, Firebase
-- **Tools & Platforms**: Git, Linux Shell, Arduino IDE, Google AntiGravity / Claude Code
+Two worlds, one button:
+- **Night**: deep space. Parallax starfield, constellations that follow the cursor, shooting stars, nebulae, planets.
+- **Morning**: anime valley. Procedural mountains with snowcaps and mist, drifting clouds, a river, swaying trees and grass, falling petals.
 
-## 🛠️ Featured Work
+Also: a real terminal (type `help`), live GitHub + LeetCode stats, a certificate wall, 3D tilt cards, click bursts, and a Konami code.
 
-### [InstantDRS](https://github.com/ronaksarda/InstantDRS)
-**Tech Stack**: Python, Flask
-An emergency response system designed to handle live queue processing and multimodal triage during critical situations. 
-- [Live Site](https://instantdrs.onrender.com/)
+Plain HTML, CSS and JavaScript. No build step, no frameworks.
 
-### [Vault](https://github.com/ronaksarda/Vault)
-**Tech Stack**: C
-A C-based file operating system focused on core file management, structure, and low-level system operations.
+| File | What it holds |
+|---|---|
+| `index.html` | page structure |
+| `data.js` | projects, wins, certificates, stack (edit this to update content) |
+| `scene.js` | night + morning backgrounds and the particle FX layer |
+| `script.js` | UI: loader, world switch, terminal, projects, stats |
+| `styles.css` | everything visual |
 
-### High-Performance Engine
-**Tech Stack**: C++
-Currently developing a core systems application utilizing modern C++ memory management and execution optimization techniques. *(In Development)*
-
-## 🏆 Competitive Programming
-
-Consistent problem solver focused on Data Structures and Algorithms. Actively refining algorithmic efficiency logic on LeetCode.
-- **LeetCode Profile**: [ronnie0524](https://leetcode.com/ronnie0524/)
-
-## 📫 Let's Connect
-
-I'm always open to discussing system architecture, software engineering roles, or new projects.
-
-- **Email**: [rockysarda18@gmail.com](mailto:rockysarda18@gmail.com)
-- **LinkedIn**: [ronak-sarda05](https://www.linkedin.com/in/ronak-sarda05/)
-- **GitHub**: [@ronaksarda](https://github.com/ronaksarda)
-
----
-
-> [!NOTE]
-> This repository contains the source code for my personal portfolio website. 
-> To view the live version, visit: [ronaksarda.github.io/portfolio](https://ronaksarda.github.io/portfolio/) (or your deployed link)
+Run locally: `python -m http.server` and open http://localhost:8000.
