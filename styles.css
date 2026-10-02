@@ -258,7 +258,7 @@ mark { background: linear-gradient(transparent 60%, rgba(var(--a3-rgb), .35) 60%
 .hero-right { display: grid; place-items: center; }
 .avatar-system { position: relative; width: min(420px, 80vw); aspect-ratio: 1; display: grid; place-items: center; }
 .avatar-core { position: relative; width: 52%; aspect-ratio: 1; border-radius: 50%; padding: 5px; background: var(--grad); background-size: 200% 200%; animation: shimmer 4s linear infinite; will-change: transform; transition: transform .2s; }
-.avatar-core img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 22%; border-radius: 50%; border: 4px solid var(--bg); }
+.avatar-core img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; border-radius: 50%; border: 4px solid var(--bg); }
 .avatar-ring { position: absolute; inset: 0; width: 100%; height: 100%; animation: spin 24s linear infinite; }
 .avatar-ring text { font: 600 11.2px var(--font-mono); letter-spacing: .14em; fill: var(--muted); }
 .orbit { position: absolute; border-radius: 50%; border: 1px dashed var(--line); animation: spin var(--t) linear infinite; }
@@ -647,3 +647,11 @@ html.warp body { animation: shake .3s infinite; }
     html[data-world="day"] .wt-knob { transform: translateX(24px) rotate(180deg); }
     .gh-nums b { font-size: 1.7rem; }
 }
+
+/* ================= SCROLLBAR ================= */
+html { scrollbar-width: thin; scrollbar-color: rgba(var(--a1-rgb), .45) transparent; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(var(--a1-rgb), .35); border-radius: 999px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: rgba(var(--a1-rgb), .65); background-clip: padding-box; }
+.term-body::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .15); background-clip: padding-box; }
