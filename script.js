@@ -32,7 +32,7 @@
             { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${r}px at ${x}px ${y}px)`] },
             { duration: 1100, easing: 'cubic-bezier(.65,0,.35,1)', pseudoElement: '::view-transition-new(root)' }
         ));
-        toast(next === 'day' ? '☀ good morning, valley' : '☾ back to the stars');
+        toast(next === 'day' ? 'good morning' : 'good night');
     });
 
     /* ---------------- loader ---------------- */
@@ -231,7 +231,7 @@
                 <p class="proj-hook">${esc(p.hook)}</p>
                 <p>${esc(p.desc)}</p>
                 <div class="tags">${p.tags.map(t => `<span>${esc(t)}</span>`).join('')}</div>
-                <span class="proj-open">read the full story <b>→</b></span>
+                <span class="proj-open">details <b>→</b></span>
             </div>
         </button>`).join('');
 
@@ -283,8 +283,8 @@
     certById['abtalks'] = certById['abtalks'] || { id: 'abtalks', title: 'ViCoDathon 2026', by: 'AB Talks' };
     $('#trophies').innerHTML = S.trophies.map(t => `
         <${t.cert ? `button data-cert="${t.cert}"` : 'div'} class="trophy glass reveal${t.cert ? ' has-cert' : ''}" data-tilt>
-            ${t.cert ? '<span class="t-cert">⧉</span>' : ''}
-            <span class="t-ico">${t.ico}</span>
+            ${t.cert ? '<span class="t-cert">view</span>' : ''}
+            <span class="t-ico">${String(S.trophies.indexOf(t) + 1).padStart(2, '0')}</span>
             <span class="t-big">${esc(t.big)}</span>
             <h4>${esc(t.title)}</h4>
             <p>${esc(t.text)}</p>
@@ -426,7 +426,7 @@ B.E. IT @ CBIT Hyderabad · class of 2029 · CGPA 8.68
 building cool things from scratch.`),
         projects: () => { print(S.projects.map(p => `<span class="c1">${p.name.padEnd(20)}</span>${p.hook}`).join('\n')); },
         skills: () => print(S.stack.map(r => '› ' + r.join(' · ')).join('\n')),
-        wins: () => print(S.trophies.map(t => `${t.ico} <span class="c5">${t.big.padEnd(7)}</span>${t.title}`).join('\n')),
+        wins: () => print(S.trophies.map(t => `<span class="c5">${t.big.padEnd(7)}</span>${t.title}`).join('\n')),
         journey: () => print(`<span class="c3">2026 →</span> Founding AI Engineering Intern, FschoolAI
 <span class="c3">2026  </span> Technical member, HICON &amp; AWS Club CBIT · GDG Hyderabad
 <span class="c3">2025 →</span> B.E. IT, CBIT Hyderabad`),

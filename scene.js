@@ -29,7 +29,7 @@
             x: Math.random() * W, y: Math.random() * H,
             z: Math.random() ** 2 * 0.9 + 0.1,
             tw: Math.random() * Math.PI * 2,
-            hue: Math.random() < .15 ? (Math.random() < .5 ? 190 : 320) : 0
+            hue: Math.random() < .15 ? (Math.random() < .5 ? 205 : 30) : 0
         }));
     }
     function drawStars(t) {
@@ -43,7 +43,7 @@
             const a = 0.35 + 0.65 * Math.abs(Math.sin(t * 0.0015 + s.tw));
             const r = depth * 1.7;
             sctx.globalAlpha = a * (0.4 + depth * 0.6);
-            sctx.fillStyle = s.hue ? `hsl(${s.hue} 100% 80%)` : '#fff';
+            sctx.fillStyle = s.hue ? `hsl(${s.hue} 90% 82%)` : '#fff';
             if (warp > 0.02) {
                 const dx = x - W / 2, dy = y - H / 2, len = warp * depth * 0.4;
                 sctx.strokeStyle = sctx.fillStyle; sctx.lineWidth = r;
@@ -68,7 +68,7 @@
                 const [x1, y1, d1] = near[i], [x2, y2] = near[j];
                 const dd = Math.hypot(x1 - x2, y1 - y2);
                 if (dd < 90) {
-                    sctx.strokeStyle = `rgba(110,243,255,${(1 - d1 / 160) * (1 - dd / 90) * .7})`;
+                    sctx.strokeStyle = `rgba(159,214,255,${(1 - d1 / 160) * (1 - dd / 90) * .7})`;
                     sctx.lineWidth = .8; sctx.beginPath(); sctx.moveTo(x1, y1); sctx.lineTo(x2, y2); sctx.stroke();
                 }
             }
@@ -277,7 +277,7 @@
                 fctx.fillStyle = p.hue < .4 ? '#ffb3c8' : p.hue < .7 ? '#fff1a6' : '#9be08a';
                 fctx.beginPath(); fctx.ellipse(0, 0, p.s * 1.4, p.s * .7, 0, 0, 7); fctx.fill(); fctx.restore();
             } else {
-                fctx.fillStyle = p.hue < .33 ? '#6ef3ff' : p.hue < .66 ? '#ff6ad5' : '#ffffff';
+                fctx.fillStyle = p.hue < .33 ? '#9fd6ff' : p.hue < .66 ? '#ff8f6b' : '#ffffff';
                 fctx.shadowBlur = 12; fctx.shadowColor = fctx.fillStyle;
                 if (p.kind === 'burst' && p.hue > .8) {
                     fctx.save(); fctx.translate(p.x, p.y); fctx.rotate(p.rot); star(fctx, p.s * 1.6); fctx.restore();
