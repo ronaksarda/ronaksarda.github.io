@@ -1,6 +1,6 @@
 // All site content lives here. Edit this file to update projects, wins and certificates.
 window.SITE = {
-    discord: 'ronnie0524',
+    discord: 'samronnie_05',
 
     projects: [
         {
