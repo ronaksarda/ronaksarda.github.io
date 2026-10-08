@@ -125,7 +125,7 @@ window.SITE = {
         { big: '#329', title: 'HackerRank Orchestrate', text: 'Ranked #329 of 1,773 globally for an AI agent (June 2026).', cert: 'hackerrank' },
         { big: 'Top 7', title: 'CBIT COSC HackWeek', text: 'Top 7 of 800+ participants.' },
         { big: 'Top 10', title: 'AB Talks ViCoDathon 2026', text: "India's AI vibe-coding hackathon.", cert: 'abtalks' },
-        { big: 'Top 500', title: "ECSoC '26", text: 'Top 500 of 13,000+ in Elite Coders Summer of Code.', cert: 'ecsoc-appreciation' },
+        { big: '#138', title: "ECSoC '26", text: 'Ranked 138 of 13,000+ in Elite Coders Summer of Code.', cert: 'ecsoc-appreciation' },
         { big: 'R2', title: 'Citadel Securities', text: 'Reached the 2nd interview round (DSA) as a first-year.' },
         { big: 'R2', title: 'Adobe University Hackathon', text: 'Qualified for Round 2.' },
         { big: 'R2', title: 'COOL Reverse Hackathon', text: 'Qualified for Round 2.', cert: 'reverse-hackathon' },
@@ -138,7 +138,7 @@ window.SITE = {
     certs: [
         { id: 'hackerrank', title: 'HackerRank Orchestrate · #329', by: 'HackerRank · Jun 2026' },
         { id: 'microsoft-learn', title: 'Applied Skills: Agents in Microsoft Foundry', by: 'Microsoft · Jun 2026' },
-        { id: 'ecsoc-appreciation', title: "ECSoC '26 · Top 500", by: 'Elite Coders · 2026' },
+        { id: 'ecsoc-appreciation', title: "ECSoC '26 · Rank 138", by: 'Elite Coders · 2026' },
         { id: '7B', title: 'Open-source contribution · Kepler', by: '7Blocks · Sep 2026' },
         { id: 'reverse-hackathon', title: 'Reverse Hackathon · Round 2', by: 'COOL · 2026' },
         { id: 'abtalks', title: 'ViCoDathon 2026', by: 'AB Talks · Aug 2026' },
