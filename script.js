@@ -205,13 +205,13 @@
     /* ---------------- projects ---------------- */
     const VIZ = {
         gif: () => `<div class="viz viz-gif"><img src="https://raw.githubusercontent.com/ronaksarda/GitSpace/main/readme_demo.gif" alt="GitSpace demo: flying a ship between developer islands" loading="lazy"><span class="viz-label">live at gitspace.me</span></div>`,
-        funnel: () => `<div class="viz"><span class="viz-timer">⏱ &lt; 5 min · CPU</span><div class="funnel"><div><span>100,000 candidates</span></div><div><span>3,000 shortlisted</span></div><div><span>top 100 ✓</span></div></div></div>`,
-        budget: () => `<div class="viz"><div class="budget"><div class="budget-row"><span>travel budget</span><span>$2,500</span></div><div class="budget-bar"><span></span></div><div class="memo">🧠 memory: Maya's invoices run ~50% high → this is really $902. 84% used. careful.</div></div></div>`,
+        funnel: () => `<div class="viz"><span class="viz-timer">&lt; 5 min · CPU</span><div class="funnel"><div><span>100,000 candidates</span></div><div><span>3,000 shortlisted</span></div><div><span>top 100 ✓</span></div></div></div>`,
+        budget: () => `<div class="viz"><div class="budget"><div class="budget-row"><span>travel budget</span><span>$2,500</span></div><div class="budget-bar"><span></span></div><div class="memo">memory: Maya's invoices run ~50% high → this is really $902. 84% used. careful.</div></div></div>`,
         label: () => `<div class="viz"><div class="label-card"><b>NET QTY 500 g</b><div>MRP ₹ 120.00 (incl. taxes) <span class="ok">✓</span></div><div>Batch: B2026-114 <span class="ok">✓</span></div><div>Mfd: 08/2026 <span class="ok">✓</span></div><div>Customer care: 1800-… <span class="ok">✓</span></div></div></div>`,
         wave: () => `<div class="viz"><span class="keycap">F8</span><div class="wave">${Array.from({ length: 22 }, (_, i) => `<i style="animation-delay:${(i * 0.07 % 1).toFixed(2)}s;animation-duration:${(.5 + (i * 37 % 10) / 14).toFixed(2)}s"></i>`).join('')}</div></div>`,
-        chat: () => `<div class="viz"><span class="doc-ico">📄 thesis.pdf · local</span><div class="chat"><div class="q">what's the main finding?</div><div class="a">Section 4: latency drops 38% with batching.</div><div class="q q2">cite it?</div><div class="a a2">p. 12, table 3 ✓</div></div></div>`,
-        trail: () => `<div class="viz trail"><span class="fps">60 FPS</span><span class="emo" id="emo">😄</span><svg viewBox="0 0 400 200"><path d="M20,150 C80,20 140,180 200,90 S320,10 380,120"/></svg></div>`,
-        vault: () => `<div class="viz"><div class="bits"><div>${'10110100 ⊕ 01101001 = 11011101 · '.repeat(40)}</div></div><div class="vault-lock"><span>🔒</span></div></div>`
+        chat: () => `<div class="viz"><span class="doc-ico">thesis.pdf · local</span><div class="chat"><div class="q">what's the main finding?</div><div class="a">Section 4: latency drops 38% with batching.</div><div class="q q2">cite it?</div><div class="a a2">p. 12, table 3 ✓</div></div></div>`,
+        trail: () => `<div class="viz trail"><span class="fps">60 FPS</span><svg viewBox="0 0 400 200"><path d="M20,150 C80,20 140,180 200,90 S320,10 380,120"/></svg></div>`,
+        vault: () => `<div class="viz"><div class="bits"><div>${'10110100 ⊕ 01101001 = 11011101 · '.repeat(40)}</div></div><div class="vault-lock"><span>XOR</span></div></div>`
     };
     const projWrap = $('#projects');
     projWrap.innerHTML = S.projects.map(p => `
@@ -235,10 +235,6 @@
             </div>
         </button>`).join('');
 
-    // cycle emoji on SoulFlow
-    const emos = ['😄', '😮', '😠', '😌', '🤩'];
-    let ei = 0;
-    setInterval(() => { const e = $('#emo'); if (e) e.textContent = emos[ei = (ei + 1) % emos.length]; }, 1000);
 
     $$('.filter').forEach(f => f.addEventListener('click', () => {
         $$('.filter').forEach(x => x.classList.toggle('active', x === f));
@@ -270,8 +266,8 @@
 
     /* ---------------- hangar + lab ---------------- */
     $('#hangar').innerHTML = S.hangar.map(h => `
-        <${h.repo ? `a href="${h.repo}" target="_blank" rel="noopener"` : 'div'} class="hangar-card glass" data-tilt>
-            <h4><span>${h.icon}</span>${esc(h.name)} <span class="badge wip">wip</span></h4>
+        <${h.repo ? `a href="${h.repo}" target="_blank" rel="noopener"` : 'div'} class="hangar-card glass">
+            <h4>${esc(h.name)} <span class="badge wip">wip</span></h4>
             <p>${esc(h.desc)}</p>
             <p class="muted" style="font-family:var(--font-mono);font-size:.75rem;margin-top:6px">${esc(h.tags)}</p>
             <div class="progress"><span style="width:${h.progress}%"></span></div>
@@ -282,7 +278,7 @@
     const certById = Object.fromEntries(S.certs.map(c => [c.id, c]));
     certById['abtalks'] = certById['abtalks'] || { id: 'abtalks', title: 'ViCoDathon 2026', by: 'AB Talks' };
     $('#trophies').innerHTML = S.trophies.map(t => `
-        <${t.cert ? `button data-cert="${t.cert}"` : 'div'} class="trophy glass reveal${t.cert ? ' has-cert' : ''}" data-tilt>
+        <${t.cert ? `button data-cert="${t.cert}"` : 'div'} class="trophy glass reveal${t.cert ? ' has-cert' : ''}">
             ${t.cert ? '<span class="t-cert">view</span>' : ''}
             <span class="t-ico">${String(S.trophies.indexOf(t) + 1).padStart(2, '0')}</span>
             <span class="t-big">${esc(t.big)}</span>
@@ -402,7 +398,7 @@
         catch { toast(text); }
     }
     $('#mega-mail').addEventListener('click', e => {
-        copy('rockysarda18@gmail.com', '✓ email copied, talk soon');
+        copy('rockysarda18@gmail.com', '✓ email copied');
         const r = e.currentTarget.getBoundingClientRect();
         for (let i = 0; i < 5; i++) setTimeout(() => Scene.burst(r.left + Math.random() * r.width, r.top + r.height / 2, 30), i * 90);
     });
@@ -415,15 +411,14 @@
     const cmds = {
         help: () => print(`<span class="c1">available commands</span>
   whoami     about me          projects   what I built
-  skills     the arsenal       wins       receipts
+  skills     tech stack        wins       awards
   journey    experience        resume     download it
   contact    reach me          socials    all the links
   day/night  switch worlds     warp       engage hyperdrive
   sudo hire ronak              clear      wipe the screen`),
         whoami: () => print(`<span class="c2">Ronak Sarda</span>
 Founding AI Engineering Intern @ FschoolAI
-B.E. IT @ CBIT Hyderabad · class of 2029 · CGPA 8.68
-building cool things from scratch.`),
+B.E. IT @ CBIT Hyderabad · class of 2029 · CGPA 8.68`),
         projects: () => { print(S.projects.map(p => `<span class="c1">${p.name.padEnd(20)}</span>${p.hook}`).join('\n')); },
         skills: () => print(S.stack.map(r => '› ' + r.join(' · ')).join('\n')),
         wins: () => print(S.trophies.map(t => `<span class="c5">${t.big.padEnd(7)}</span>${t.title}`).join('\n')),
@@ -438,21 +433,17 @@ discord ${esc(S.discord)}`),
 <a href="https://www.linkedin.com/in/ronak-sarda05/" target="_blank">linkedin/ronak-sarda05</a>
 <a href="https://leetcode.com/u/ronnie0524/" target="_blank">leetcode/ronnie0524</a>
 <a href="https://www.hackerrank.com/profile/ronnie0524" target="_blank">hackerrank/ronnie0524</a>`),
-        day: () => { if (root.dataset.world !== 'day') $('#world-toggle').click(); print('☀ good morning.', 'c5'); },
-        night: () => { if (root.dataset.world !== 'night') $('#world-toggle').click(); print('☾ hello, stars.', 'c1'); },
+        day: () => { if (root.dataset.world !== 'day') $('#world-toggle').click(); print('day mode.', 'c5'); },
+        night: () => { if (root.dataset.world !== 'night') $('#world-toggle').click(); print('night mode.', 'c1'); },
         morning: () => cmds.day(),
-        warp: () => { engageWarp(); print('🚀 hyperdrive engaged. hold on.', 'c2'); },
-        'sudo hire ronak': () => { print('<span class="c3">[sudo] access granted.</span> opening mail client… 🎉'); setTimeout(() => location.href = 'mailto:rockysarda18@gmail.com?subject=Internship%20opportunity', 600); },
-        sudo: () => print('nice try. try <span class="c2">sudo hire ronak</span>', 'c4'),
-        ls: () => print('projects/  certificates/  resume.pdf  secrets.txt  coffee.sh'),
-        'cat secrets.txt': () => print('i debug with console.log and i am not sorry.', 'c4'),
+        warp: () => { engageWarp(); print('warp engaged.', 'c2'); },
+        'sudo hire ronak': () => { print('<span class="c3">[sudo] access granted.</span> opening mail client…'); setTimeout(() => location.href = 'mailto:rockysarda18@gmail.com?subject=Internship%20opportunity', 600); },
+        ls: () => print('projects/  certificates/  resume.pdf'),
         'cat resume.pdf': () => cmds.resume(),
-        './coffee.sh': () => print('☕ brewing… ████████████ 100%. productivity +40%.', 'c5'),
-        cgpa: () => print('8.68 / 10 (1st year). 2nd year loading…', 'c5'),
+        cgpa: () => print('8.68 / 10 (1st year)', 'c5'),
         date: () => print(new Date().toString(), 'c4'),
         clear: () => { out.innerHTML = ''; },
-        exit: () => print('you can check out any time you like, but you can never leave.', 'c4'),
-        hello: () => print('hey! 👋 type <span class="c1">help</span>.'), hi: () => cmds.hello()
+        hello: () => print('type <span class="c1">help</span>.'), hi: () => cmds.hello()
     };
     function run(raw) {
         const c = raw.trim().toLowerCase();
@@ -493,7 +484,7 @@ discord ${esc(S.discord)}`),
         if (e.target === input) return;
         kp = (e.key.toLowerCase() === KONAMI[kp].toLowerCase()) ? kp + 1 : (e.key === KONAMI[0] ? 1 : 0);
         if (kp === KONAMI.length) {
-            kp = 0; engageWarp(); toast('🚀 konami unlocked: hyperdrive!');
+            kp = 0; engageWarp(); toast('konami code: warp engaged');
             for (let i = 0; i < 12; i++) setTimeout(() => Scene.burst(Math.random() * innerWidth, Math.random() * innerHeight, 30), i * 120);
         }
     });

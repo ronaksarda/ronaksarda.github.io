@@ -108,8 +108,8 @@ window.SITE = {
     ],
 
     hangar: [
-        { name: 'Pink Verse', icon: '🌸', desc: 'Cross-platform desktop app in C++ and SFML.', tags: 'C++ · SFML', progress: 45 },
-        { name: 'Low-Key Connect', icon: '🔗', desc: 'Connect through LinkedIn and GitHub, but way more fun.', tags: 'full-stack', progress: 30, repo: 'https://github.com/ronaksarda/Low-Key-Connect' }
+        { name: 'Pink Verse', desc: 'Cross-platform desktop app in C++ and SFML.', tags: 'C++ · SFML', progress: 45 },
+        { name: 'Low-Key Connect', desc: 'Connect through LinkedIn and GitHub, but way more fun.', tags: 'full-stack', progress: 30, repo: 'https://github.com/ronaksarda/Low-Key-Connect' }
     ],
 
     lab: [
@@ -122,17 +122,17 @@ window.SITE = {
     ],
 
     trophies: [
-        { ico: '🥇', big: '#329', title: 'HackerRank Orchestrate', text: 'Ranked #329 of 1,773 globally for an AI agent (June 2026).', cert: 'hackerrank' },
-        { ico: '🏅', big: 'Top 7', title: 'CBIT COSC HackWeek', text: 'Top 7 out of 2,500+ participants.' },
-        { ico: '🎤', big: 'Top 10', title: 'AB Talks ViCoDathon 2026', text: "India's AI vibe-coding hackathon.", cert: 'abtalks' },
-        { ico: '🌐', big: 'Top 500', title: "ECSoC '26", text: 'Top 500 of 13,000+ in Elite Coders Summer of Code.', cert: 'ecsoc-appreciation' },
-        { ico: '📈', big: 'R2', title: 'Citadel Securities', text: 'Reached the 2nd interview round (DSA) as a first-year.' },
-        { ico: '🎨', big: 'R2', title: 'Adobe University Hackathon', text: 'Qualified for Round 2.' },
-        { ico: '🔐', big: 'R2', title: 'COOL Reverse Hackathon', text: 'Qualified for Round 2.', cert: 'reverse-hackathon' },
-        { ico: '🌍', big: '2026', title: 'Google Solution Challenge', text: 'Build with AI prototype submission (Hack2Skill).', cert: 'solution-challenge' },
-        { ico: '🧱', big: 'OSS', title: '7Blocks · Kepler', text: 'Contribution certificate for the open-source Kepler platform.', cert: '7B' },
-        { ico: '☁️', big: '34', title: 'Google Cloud Facilitator', text: '2026 facilitator · 34 Google Cloud skill badges.' },
-        { ico: '🎯', big: '3007', title: 'TS EAPCET 2025', text: 'State rank 3007.' }
+        { big: '#329', title: 'HackerRank Orchestrate', text: 'Ranked #329 of 1,773 globally for an AI agent (June 2026).', cert: 'hackerrank' },
+        { big: 'Top 7', title: 'CBIT COSC HackWeek', text: 'Top 7 of 800+ participants.' },
+        { big: 'Top 10', title: 'AB Talks ViCoDathon 2026', text: "India's AI vibe-coding hackathon.", cert: 'abtalks' },
+        { big: 'Top 500', title: "ECSoC '26", text: 'Top 500 of 13,000+ in Elite Coders Summer of Code.', cert: 'ecsoc-appreciation' },
+        { big: 'R2', title: 'Citadel Securities', text: 'Reached the 2nd interview round (DSA) as a first-year.' },
+        { big: 'R2', title: 'Adobe University Hackathon', text: 'Qualified for Round 2.' },
+        { big: 'R2', title: 'COOL Reverse Hackathon', text: 'Qualified for Round 2.', cert: 'reverse-hackathon' },
+        { big: '2026', title: 'Google Solution Challenge', text: 'Build with AI prototype submission (Hack2Skill).', cert: 'solution-challenge' },
+        { big: 'OSS', title: '7Blocks · Kepler', text: 'Contribution certificate for the open-source Kepler platform.', cert: '7B' },
+        { big: '34', title: 'Google Cloud Facilitator', text: '2026 facilitator · 34 Google Cloud skill badges.' },
+        { big: '3007', title: 'TS EAPCET 2025', text: 'State rank 3007.' }
     ],
 
     certs: [
@@ -151,11 +151,11 @@ window.SITE = {
     ],
 
     stack: [
-        ['C++', 'C', 'Python', 'JavaScript', 'SQL', 'HTML', 'CSS', 'C++17', 'Bash'],
+        ['TypeScript', 'JavaScript', 'C++', 'C', 'Python', 'SQL', 'HTML', 'CSS', 'C++17', 'Bash'],
         ['RAG pipelines', 'Sentence-Transformers', 'Hugging Face', 'Llama 3.1', 'Groq / Qwen Vision', 'Gemini', 'Ollama', 'MCP', 'AI agents'],
-        ['Node.js', 'Express', 'FastAPI', 'Flask', 'PostgreSQL', 'Supabase', 'Firebase', 'GitHub OAuth', 'Socket.IO'],
+        ['React', 'Node.js', 'Express', 'FastAPI', 'Flask', 'PostgreSQL', 'Supabase', 'Firebase', 'GitHub OAuth', 'Socket.IO'],
         ['OpenCV', 'MediaPipe', 'ONNX Runtime', 'Tesseract OCR', 'NumPy', 'Pandas', 'Git', 'Linux', 'GCC']
     ],
 
-    roles: ['AI agents', 'C++ layout engines', 'offline ML pipelines', 'vision-LLM systems', 'RAG pipelines', 'things from scratch']
+    roles: ['AI agents', 'C++ layout engines', 'offline ML pipelines', 'vision-LLM systems', 'RAG pipelines']
 };
