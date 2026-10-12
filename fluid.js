@@ -9,9 +9,9 @@
     const small = Math.min(innerWidth, innerHeight) < 700;
     const config = {
         SIM_RESOLUTION: 128,
-        DYE_RESOLUTION: small ? 512 : 1024,
-        DENSITY_DISSIPATION: 3.2,
-        VELOCITY_DISSIPATION: 2,
+        DYE_RESOLUTION: small ? 720 : 1440,
+        DENSITY_DISSIPATION: 0.5,
+        VELOCITY_DISSIPATION: 3,
         PRESSURE: 0.1,
         PRESSURE_ITERATIONS: 20,
         CURL: 3,
@@ -147,9 +147,14 @@
                 vec2 v = texture2D(uVelocity, vUv).xy - vec2(R - L, T - B);
                 gl_FragColor = vec4(v, 0.0, 1.0);
             }`,
-        display: `uniform sampler2D uTexture;
+        display: `uniform sampler2D uTexture; uniform vec2 texelSize;
             void main () {
                 vec3 c = texture2D(uTexture, vUv).rgb;
+                // light the dye like a surface so overlapping colours read as folds of paint
+                float dx = length(texture2D(uTexture, vR).rgb) - length(texture2D(uTexture, vL).rgb);
+                float dy = length(texture2D(uTexture, vT).rgb) - length(texture2D(uTexture, vB).rgb);
+                vec3 n = normalize(vec3(dx, dy, length(texelSize)));
+                c *= clamp(dot(n, vec3(0.0, 0.0, 1.0)) + 0.7, 0.7, 1.0);
                 float a = max(c.r, max(c.g, c.b));
                 gl_FragColor = vec4(c, a);
             }`
@@ -333,6 +338,7 @@
 
     function render() {
         const p = progs.display; p.use();
+        gl.uniform2f(p.u.texelSize, 1 / gl.drawingBufferWidth, 1 / gl.drawingBufferHeight);
         gl.uniform1i(p.u.uTexture, dye.read.attach(0));
         blit(null);
     }
@@ -405,8 +411,8 @@
         step(dt);
         render();
 
-        // dye has fully dissipated a few seconds after the last input, so stop drawing
-        if (now - lastInput > 6000) { running = false; return; }
+        // dye lingers and keeps mixing for a while; stop drawing once it has faded out
+        if (now - lastInput > 25000) { running = false; return; }
         requestAnimationFrame(frame);
     }
     function wake() {

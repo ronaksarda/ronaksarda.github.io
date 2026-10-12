@@ -4,34 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Ronak Sarda · AI engineer</title>
+    <title>Ronak Sarda · AI Engineer Intern</title>
     <meta name="description" content="Ronak Sarda. Founding AI Engineering Intern @ FschoolAI, 2nd-year IT @ CBIT Hyderabad. AI agents, C++ systems, full-stack. Open to internships from Jan 2027.">
-    <meta name="theme-color" content="#fbfbfa" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#0e0e0d" media="(prefers-color-scheme: dark)">
-    <meta property="og:title" content="Ronak Sarda · AI engineer">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+    <meta property="og:title" content="Ronak Sarda · AI Engineer Intern">
     <meta property="og:description" content="AI Engineering Intern @ FschoolAI · IT @ CBIT '29 · AI agents, C++ systems, full-stack.">
     <meta property="og:image" content="https://ronaksarda.github.io/assets/me.jpg">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23111110'/><text x='50' y='69' font-family='Arial Black,Arial' font-weight='900' font-size='54' text-anchor='middle' fill='%23ff4f1a'>R</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%2309090b'/><text x='50' y='69' font-family='Arial Black,Arial' font-weight='900' font-size='54' text-anchor='middle' fill='%23ffffff'>R</text></svg>">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Archivo:wdth,wght@100..125,600..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=21">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=30">
     <script>
         try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) { }
     </script>
 </head>
 
 <body>
-    <a class="skip" href="#ask-input">Skip to the question box</a>
+    <a class="skip" href="#about">Skip to content</a>
     <canvas id="fluid" aria-hidden="true"></canvas>
 
     <header class="top">
-        <button class="brand" id="home" type="button" aria-label="Back to start">
-            <img src="assets/me.jpg" alt="" width="32" height="32">
-            <span>Ronak Sarda</span>
-        </button>
-        <button class="status" type="button" data-ask="contact">Open to internships from Jan 2027</button>
+        <a class="status" href="#contact">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span>Open to internships from Jan 2027</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6" /></svg>
+        </a>
         <div class="top-actions">
             <a class="top-link" href="assets/resume/Ronak_Sarda_Resume.pdf" download>Resume</a>
             <button class="icon-btn" id="theme" type="button" aria-label="Switch to dark theme">
@@ -42,62 +42,92 @@
     </header>
 
     <main>
-        <section class="hero" id="hero" aria-labelledby="hero-title">
+        <section class="hero" id="top" aria-labelledby="hero-title">
             <div class="hero-inner">
-                <img class="hero-photo" src="assets/me.jpg" alt="Ronak Sarda" width="168" height="168">
+                <div class="logo-tile" aria-hidden="true">R</div>
                 <p class="hello">Hey, I'm Ronak</p>
-                <h1 id="hero-title">AI Engineer</h1>
-                <p class="hero-sub">Founding AI Engineering Intern at <b>FschoolAI</b>. IT at CBIT Hyderabad, class of 2029. I build AI agents and write C++ when speed matters.</p>
-
-                <form class="ask" id="hero-form" autocomplete="off">
-                    <label class="sr" for="ask-input">Ask me anything</label>
-                    <input id="ask-input" name="q" type="text" placeholder="Ask me anything…" maxlength="200" enterkeyhint="send">
-                    <button class="send" type="submit" aria-label="Send">
-                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" /></svg>
-                    </button>
-                </form>
-
-                <div class="chips hero-chips" id="hero-chips"></div>
+                <h1 id="hero-title">AI Engineer Intern</h1>
+                <img class="hero-photo" src="assets/me.jpg" alt="Ronak Sarda" width="220" height="220">
+                <p class="hero-sub">Founding AI engineering intern at <b>FschoolAI</b>. IT at CBIT Hyderabad, class of 2029. I build AI agents, and write C++ when speed matters.</p>
+                <div class="hero-cta">
+                    <a class="btn btn-blue" href="#projects">See my work</a>
+                    <a class="btn btn-glass" href="#contact">Get in touch</a>
+                </div>
+                <ul class="socials" id="socials"></ul>
             </div>
             <div class="bigword" aria-hidden="true">RONAK</div>
         </section>
 
-        <section class="thread" id="thread" aria-label="Conversation" aria-live="polite"></section>
+        <section class="sec" id="about" aria-labelledby="about-h">
+            <h2 class="sec-h" id="about-h"><span class="sec-ico" style="--c:var(--c-me)" data-ico="me"></span>About me</h2>
+            <div class="glass about" id="about-body"></div>
+        </section>
+
+        <section class="sec" id="work" aria-labelledby="work-h">
+            <h2 class="sec-h" id="work-h"><span class="sec-ico" style="--c:var(--c-experience)" data-ico="experience"></span>Experience</h2>
+            <ol class="journey" id="journey"></ol>
+        </section>
+
+        <section class="sec sec-wide" id="projects" aria-labelledby="projects-h">
+            <h2 class="sec-h" id="projects-h"><span class="sec-ico" style="--c:var(--c-projects)" data-ico="projects"></span>Projects</h2>
+            <p class="sec-note">Tap a card for the full story.</p>
+            <div class="pgrid" id="pgrid"></div>
+            <div class="side-lists">
+                <div class="glass">
+                    <h3 class="mini-h">Building right now</h3>
+                    <ul class="mini-list" id="hangar"></ul>
+                </div>
+                <div class="glass">
+                    <h3 class="mini-h">Smaller things</h3>
+                    <ul class="mini-list" id="lab"></ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="sec" id="skills" aria-labelledby="skills-h">
+            <h2 class="sec-h" id="skills-h"><span class="sec-ico" style="--c:var(--c-skills)" data-ico="skills"></span>Skills</h2>
+            <div class="skills" id="skills-body"></div>
+        </section>
+
+        <section class="sec sec-wide" id="wins" aria-labelledby="wins-h">
+            <h2 class="sec-h" id="wins-h"><span class="sec-ico" style="--c:var(--c-wins)" data-ico="wins"></span>Wins</h2>
+            <div class="wins" id="wins-body"></div>
+            <h3 class="mini-h certs-h">Certificates</h3>
+            <div class="certs" id="certs" tabindex="0" aria-label="Certificates, scroll sideways"></div>
+        </section>
+
+        <section class="sec" id="contact" aria-labelledby="contact-h">
+            <h2 class="sec-h" id="contact-h"><span class="sec-ico" style="--c:var(--c-contact)" data-ico="contact"></span>Contact</h2>
+            <div class="glass contact" id="contact-body"></div>
+        </section>
+
+        <footer class="foot">Ronak Sarda · Hyderabad, India · built by hand, no frameworks</footer>
     </main>
 
-    <div class="dock" id="dock">
-        <div class="dock-inner">
-            <button class="dock-toggle" id="dock-toggle" type="button" aria-expanded="true" aria-controls="dock-chips">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" /></svg>
-                <span>Hide quick questions</span>
-            </button>
-            <div class="chips dock-chips" id="dock-chips"></div>
-            <form class="ask" id="dock-form" autocomplete="off">
-                <label class="sr" for="dock-input">Ask me anything</label>
-                <input id="dock-input" name="q" type="text" placeholder="Ask me anything…" maxlength="200" enterkeyhint="send">
-                <button class="send" type="submit" aria-label="Send">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" /></svg>
-                </button>
-            </form>
-            <p class="fineprint">Answers come from my own notes on this page. No model, nothing leaves your browser.</p>
-        </div>
-    </div>
+    <nav class="dock" aria-label="Sections">
+        <div class="dock-inner" id="dock"></div>
+    </nav>
+
+    <dialog class="sheet" id="sheet" aria-labelledby="sheet-title">
+        <form method="dialog"><button class="icon-btn sheet-x" aria-label="Close">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
+            </button></form>
+        <div id="sheet-body"></div>
+    </dialog>
 
     <dialog class="lightbox" id="lightbox" aria-label="Certificate">
-        <form method="dialog"><button class="icon-btn lb-x" aria-label="Close">
+        <form method="dialog"><button class="icon-btn sheet-x" aria-label="Close">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" /></svg>
             </button></form>
         <img id="lb-img" alt="">
         <p id="lb-cap"></p>
     </dialog>
 
-    <noscript>
-        <p style="padding:24px;max-width:60ch;margin:auto">This page answers questions with JavaScript. Without it: email <a href="mailto:rockysarda18@gmail.com">rockysarda18@gmail.com</a>, see <a href="https://github.com/ronaksarda">GitHub</a>, or grab the <a href="assets/resume/Ronak_Sarda_Resume.pdf">resume</a>.</p>
-    </noscript>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script src="data.js?v=20"></script>
-    <script src="script.js?v=21"></script>
-    <script src="fluid.js?v=21"></script>
+    <script src="data.js?v=30"></script>
+    <script src="script.js?v=30"></script>
+    <script src="fluid.js?v=30"></script>
 </body>
 
 </html>
