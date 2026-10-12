@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Archivo:wdth,wght@100..125,600..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=20">
+    <link rel="stylesheet" href="styles.css?v=21">
     <script>
         try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) { }
     </script>
@@ -24,6 +24,7 @@
 
 <body>
     <a class="skip" href="#ask-input">Skip to the question box</a>
+    <canvas id="fluid" aria-hidden="true"></canvas>
 
     <header class="top">
         <button class="brand" id="home" type="button" aria-label="Back to start">
@@ -95,7 +96,8 @@
     </noscript>
 
     <script src="data.js?v=20"></script>
-    <script src="script.js?v=20"></script>
+    <script src="script.js?v=21"></script>
+    <script src="fluid.js?v=21"></script>
 </body>
 
 </html>
