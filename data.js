@@ -97,6 +97,63 @@ window.SITE = {
             ]
         },
         {
+            id: 'ideator', tone: 'moss', name: 'Ideator', kicker: 'startup idea vs. the real market', cat: ['ai', 'web'],
+            repo: 'https://github.com/ronaksarda/ideator', viz: 'graph',
+            video: 'BAruAQ9rAyY',
+            hook: 'Pitch an idea. An agent walks a knowledge graph of real competitors to find the gap.',
+            desc: 'Live searches feed a FalkorDB graph. A Gemma agent works through it with MCP tools and saves its decision, linked to the evidence behind it.',
+            tags: ['Python', 'FalkorDB', 'MCP', 'Gemma', 'SerpApi'],
+            demo: ['Example idea in: "an app that splits grocery bills"', 'Search: Google results, Google Play apps and prices, Reddit complaints, in parallel', 'Graph: companies, prices, features and complaints written with MERGE, similar features linked SIMILAR_TO', 'Agent loop: lists graph tools over MCP, picks one per step, reads the result, repeats', 'record_decision: writes a Decision node linked to its evidence', '=Opening found, with every claim traceable to the graph'],
+            points: [
+                'Three live searches at once: competitors, Google Play names, ratings and prices, and Reddit complaints.',
+                'Everything lands in a FalkorDB graph, one per user session, using parameterized MERGE queries.',
+                'The agent picks one MCP graph tool per step and streams its reasoning to the UI in plain words.',
+                'The final decision is stored in the graph, linked to the evidence behind it.'
+            ]
+        },
+        {
+            id: 'rideradar', tone: 'brick', name: 'Ride Radar', kicker: 'transit risk for cabs and autos', cat: ['web', 'systems'],
+            repo: 'https://github.com/ronaksarda/ride-radar', viz: 'map',
+            hook: 'One tap: Green, Amber or Red for where you are and what hour it is.',
+            desc: 'Mobile web app for women in Hyderabad. It scores a location, a whole route, and works over SMS with no data. It never claims an area is "safe".',
+            tags: ['Python', 'OSRM', 'Service worker', 'SMS fallback'],
+            demo: ['Tap once: read location and current hour', 'Count reported incidents within 1 km for that hour', 'Rate it Green, Amber or Red, with links to the news reports', 'Route mode: query road geometry from OSRM, score every 500 m', 'No data? SMS parser replies in under 160 characters', '=Green means "no reported incidents nearby", never "safe"'],
+            points: [
+                'One-tap rating from incident density within 1 km, with a 24-hour risk strip and a lower-risk spot finder.',
+                'Route scoring through OSRM geometry, evaluated every 500 m and adjusted for elapsed travel time.',
+                'Offline service worker, SMS fallback, and a hold-to-record SOS mode with duress protection.',
+                'Authority dashboard for municipal monitoring.'
+            ]
+        },
+        {
+            id: 'alreadybuilt', tone: 'plum', name: 'Already Built?', kicker: 'competitor research for ideas', cat: ['ai', 'web'],
+            repo: 'https://github.com/ronaksarda/already-built', viz: 'quadrant',
+            hook: 'Describe your idea, find out who already built it, and where the gap is.',
+            desc: 'Searches GitHub, Hugging Face and Hacker News, ranks results with local embeddings, and maps competitors onto a 2D market quadrant.',
+            tags: ['Python', 'Embeddings', 'Gemma', 'Hugging Face'],
+            demo: ['Type or speak the product idea', 'Search GitHub, Hugging Face Spaces and Models, and Show HN', 'Rank candidates locally with open-weight embeddings', 'Place every competitor on a 2D market quadrant', '=Grounded breakdown of what exists and which gaps are left open'],
+            points: [
+                'Seven-stage pipeline from idea to a grounded competitive breakdown.',
+                'Local semantic vector ranking, no hosted embedding API.',
+                'Offline demo mode with a recorded result for instant playback.',
+                'Packaged as a reusable agent skill.'
+            ]
+        },
+        {
+            id: 'janitor', tone: 'ink', name: 'Downloads Janitor', kicker: 'reversible file sorter', cat: ['systems'],
+            repo: 'https://github.com/ronaksarda/document-janitor', viz: 'robot',
+            hook: 'A clay robot sorts your messy Downloads folder in front of you.',
+            desc: 'Non-destructive and deterministic. Every move goes in an append-only journal and can be undone byte for byte.',
+            tags: ['Python', 'SVG animation', 'File I/O'],
+            demo: ['Scan the folder, classify each file by rules in config.yaml', 'Robot picks a file chip off the pile', 'Carries it across the floor to the right bin', 'Duplicate? Pauses with an antenna wiggle and parks it', 'Active or fresh download? Taps a WAIT sign and skips it', '=Every move journaled, 100% reversible'],
+            points: [
+                'Animated SVG robot rig: pick up, carry, put in, skip and wait, so the animation is the explanation.',
+                'Append-only journal.json makes every move reversible byte for byte.',
+                'Dry-run mode previews the plan with a dotted path.',
+                'Skips files still downloading or saved in the last 10 minutes.'
+            ]
+        },
+        {
             id: 'reader', tone: 'plum', name: 'Screen Reader Agent', kicker: 'local AI voice layer', cat: ['ai'], wip: true,
             repo: 'https://github.com/ronaksarda/side-project', viz: 'wave',
             hook: 'Highlight any text. Press F8. It reads it to you.',

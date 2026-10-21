@@ -1,6 +1,8 @@
-// Paint that follows the cursor: a small stable-fluids simulation on WebGL.
+// Living ink behind the page: a small stable-fluids simulation on WebGL.
 // Technique after Pavel Dobryakov's WebGL Fluid Simulation (MIT).
-// Sits behind the page, reacts only to pointer input, and idles when nothing moves.
+// Drag (mouse or finger) to paint, click or tap for a burst, scroll to stir it,
+// and two slow currents keep it moving on their own. Colour drifts along a fixed palette
+// as you move, so a stroke is one smooth gradient instead of random hues.
 (() => {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const canvas = document.getElementById('fluid');
@@ -10,14 +12,14 @@
     const config = {
         SIM_RESOLUTION: 128,
         DYE_RESOLUTION: small ? 720 : 1440,
-        DENSITY_DISSIPATION: 0.5,
-        VELOCITY_DISSIPATION: 3,
-        PRESSURE: 0.1,
+        DENSITY_DISSIPATION: 0.9,
+        VELOCITY_DISSIPATION: 2.2,
+        PRESSURE: 0.8,
         PRESSURE_ITERATIONS: 20,
-        CURL: 3,
-        SPLAT_RADIUS: 0.2,
-        SPLAT_FORCE: 6000,
-        COLOR_UPDATE_SPEED: 10
+        CURL: 14,
+        SPLAT_RADIUS: 0.16,
+        SPLAT_FORCE: 5000,
+        INK: 0.3
     };
 
     const params = { alpha: true, depth: false, stencil: false, antialias: false, preserveDrawingBuffer: false };
@@ -147,16 +149,14 @@
                 vec2 v = texture2D(uVelocity, vUv).xy - vec2(R - L, T - B);
                 gl_FragColor = vec4(v, 0.0, 1.0);
             }`,
-        display: `uniform sampler2D uTexture; uniform vec2 texelSize;
+        display: `uniform sampler2D uTexture;
             void main () {
                 vec3 c = texture2D(uTexture, vUv).rgb;
-                // light the dye like a surface so overlapping colours read as folds of paint
-                float dx = length(texture2D(uTexture, vR).rgb) - length(texture2D(uTexture, vL).rgb);
-                float dy = length(texture2D(uTexture, vT).rgb) - length(texture2D(uTexture, vB).rgb);
-                vec3 n = normalize(vec3(dx, dy, length(texelSize)));
-                c *= clamp(dot(n, vec3(0.0, 0.0, 1.0)) + 0.7, 0.7, 1.0);
-                float a = max(c.r, max(c.g, c.b));
-                gl_FragColor = vec4(c, a);
+                float m = max(c.r, max(c.g, c.b));
+                // density -> opacity with a soft shoulder; hue stays saturated, premultiplied for the page behind
+                float a = (1.0 - exp(-m * 2.4)) * 0.9;
+                vec3 hue = m > 0.0001 ? c / m : vec3(0.0);
+                gl_FragColor = vec4(hue * a, a);
             }`
     };
 
@@ -360,19 +360,18 @@
     }
 
     /* ---------- color ---------- */
-    function hsv(h) {
-        const i = Math.floor(h * 6), f = h * 6 - i, q = 1 - f;
-        const m = [[1, f, 0], [q, 1, 0], [0, 1, f], [0, q, 1], [f, 0, 1], [1, 0, q]][i % 6];
-        return { r: m[0], g: m[1], b: m[2] };
+    // teal -> blue -> violet -> pink -> amber, the same family as the section colours
+    const PALETTE = [[0.05, 0.75, 0.8], [0.15, 0.5, 1], [0.5, 0.35, 1], [1, 0.3, 0.7], [1, 0.62, 0.2]];
+    function paletteAt(t) {
+        const n = PALETTE.length, x = ((t % n) + n) % n, i = Math.floor(x), f = x - i;
+        const a = PALETTE[i], b = PALETTE[(i + 1) % n], k = f * f * (3 - 2 * f);
+        return { r: a[0] + (b[0] - a[0]) * k, g: a[1] + (b[1] - a[1]) * k, b: a[2] + (b[2] - a[2]) * k };
     }
-    function newColor() {
-        const c = hsv(Math.random());
-        return { r: c.r * 0.15, g: c.g * 0.15, b: c.b * 0.15 };
-    }
+    let hueT = Math.random() * PALETTE.length;
+    const ink = (t, k = 1) => { const c = paletteAt(t); return { r: c.r * config.INK * k, g: c.g * config.INK * k, b: c.b * config.INK * k }; };
 
     /* ---------- input ---------- */
-    const pointer = { x: 0, y: 0, px: 0, py: 0, dx: 0, dy: 0, moved: false, down: false, color: newColor(), seen: false };
-    let lastInput = 0;
+    const pointer = { x: 0, y: 0, px: 0, py: 0, dx: 0, dy: 0, moved: false, seen: false };
 
     function move(cx, cy) {
         const x = (cx * scale) / canvas.width, y = 1 - (cy * scale) / canvas.height;
@@ -383,42 +382,68 @@
         pointer.dx = (x - pointer.px) * (aspect < 1 ? aspect : 1);
         pointer.dy = (y - pointer.py) / (aspect > 1 ? aspect : 1);
         pointer.moved = Math.abs(pointer.dx) + Math.abs(pointer.dy) > 0;
-        lastInput = performance.now();
-        wake();
+        // colour advances with distance travelled, so a stroke fades from one hue into the next
+        hueT += (Math.abs(pointer.dx) + Math.abs(pointer.dy)) * 2.2;
     }
-    addEventListener('pointermove', (e) => move(e.clientX, e.clientY), { passive: true });
+    function burst(x, y, big) {
+        for (let i = 0; i < (big ? 6 : 3); i++) {
+            const a = Math.random() * 6.283, f = 900 + Math.random() * 900;
+            splat(x, y, Math.cos(a) * f, Math.sin(a) * f, ink(hueT + i * 0.35, 1.4));
+        }
+    }
+    addEventListener('pointermove', (e) => { if (e.pointerType !== 'touch') move(e.clientX, e.clientY); }, { passive: true });
     addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'touch') return;
         move(e.clientX, e.clientY);
-        const c = newColor();
-        c.r *= 10; c.g *= 10; c.b *= 10;
-        splat(pointer.x, pointer.y, 10 * (Math.random() - 0.5), 30 * (Math.random() - 0.5), c);
+        burst(pointer.x, pointer.y, true);
+    }, { passive: true });
+    // fingers paint too; scrolling still works because these listeners are passive
+    addEventListener('touchstart', (e) => {
+        const t = e.touches[0];
+        pointer.seen = false; move(t.clientX, t.clientY);
+        burst(pointer.x, pointer.y, false);
+    }, { passive: true });
+    addEventListener('touchmove', (e) => { const t = e.touches[0]; move(t.clientX, t.clientY); }, { passive: true });
+
+    // scrolling stirs the ink: the faster you scroll, the stronger the current
+    let lastY = scrollY, scrollKick = 0;
+    addEventListener('scroll', () => {
+        const d = scrollY - lastY; lastY = scrollY;
+        scrollKick = Math.max(-1, Math.min(1, scrollKick + d / 400));
     }, { passive: true });
 
     /* ---------- loop ---------- */
-    let last = performance.now(), colorTimer = 0, running = false;
+    let last = performance.now(), clock = 0;
     function frame(now) {
         const dt = Math.min((now - last) / 1000, 0.016666);
-        last = now;
+        last = now; clock += dt;
         if (resize()) initBuffers();
-
-        colorTimer += dt * config.COLOR_UPDATE_SPEED;
-        if (colorTimer >= 1) { colorTimer %= 1; pointer.color = newColor(); }
 
         if (pointer.moved) {
             pointer.moved = false;
-            splat(pointer.x, pointer.y, pointer.dx * config.SPLAT_FORCE, pointer.dy * config.SPLAT_FORCE, pointer.color);
+            splat(pointer.x, pointer.y, pointer.dx * config.SPLAT_FORCE, pointer.dy * config.SPLAT_FORCE, ink(hueT));
         }
+
+        if (Math.abs(scrollKick) > 0.02) {
+            const k = scrollKick; scrollKick *= 0.85;
+            for (let i = 0; i < 2; i++) splat(Math.random(), 0.5 + (Math.random() - 0.5) * 0.6, (Math.random() - 0.5) * 400, k * -2400, ink(hueT + i, 0.6));
+        } else scrollKick = 0;
+
+        // two slow currents so the page never looks dead; faint on purpose
+        if (Math.floor(clock * 30) !== Math.floor((clock - dt) * 30)) {
+            for (let i = 0; i < 2; i++) {
+                const p = clock * 0.18 + i * 3.1;
+                const x = 0.5 + 0.42 * Math.sin(p * 1.3 + i), y = 0.5 + 0.38 * Math.sin(p * 0.9 + i * 2);
+                const vx = Math.cos(p * 1.3 + i) * 90, vy = Math.cos(p * 0.9 + i * 2) * 70;
+                splat(x, y, vx, vy, ink(clock * 0.12 + i * 2, 0.18));
+            }
+        }
+
         step(dt);
         render();
-
-        // dye lingers and keeps mixing for a while; stop drawing once it has faded out
-        if (now - lastInput > 25000) { running = false; return; }
         requestAnimationFrame(frame);
     }
-    function wake() {
-        if (running) return;
-        running = true;
-        last = performance.now();
-        requestAnimationFrame(frame);
-    }
+    // rAF already stops in hidden tabs; reset the clock so the first frame back is not a huge step
+    document.addEventListener('visibilitychange', () => { last = performance.now(); });
+    requestAnimationFrame(frame);
 })();

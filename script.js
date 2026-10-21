@@ -67,6 +67,25 @@
     $('#lab').innerHTML = S.lab.map((l) => `<li><a class="ml-name" href="${l.repo}" target="_blank" rel="noopener">${esc(l.name)}</a><span class="ml-note">${esc(l.note)}</span></li>`).join('');
 
     const sheet = $('#sheet');
+    function demoHTML(p) {
+        if (!p.demo && !p.video) return '';
+        const video = p.video ? `<div class="demo-video"><button type="button" data-video="${p.video}" aria-label="Play ${esc(p.name)} demo video" style="background-image:url(https://i.ytimg.com/vi/${p.video}/hqdefault.jpg)"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span></button></div>` : '';
+        const steps = p.demo ? `<div class="demo-head"><span>How it runs</span><button type="button" data-replay>Replay</button></div>
+            <ol class="demo-log">${p.demo.map((x) => `<li${x[0] === '=' ? ' class="res"' : ''}>${esc(x.replace(/^=/, ''))}</li>`).join('')}</ol>` : '';
+        return `<div class="demo">${video}${steps}</div>`;
+    }
+    let demoTimer;
+    function playDemo() {
+        clearTimeout(demoTimer);
+        const items = [...document.querySelectorAll('#sheet .demo-log li')];
+        const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        items.forEach((li) => li.classList.toggle('on', calm));
+        if (calm) return;
+        let i = 0;
+        const next = () => { if (i < items.length) { items[i++].classList.add('on'); demoTimer = setTimeout(next, 650); } };
+        demoTimer = setTimeout(next, 250);
+    }
+    sheet.addEventListener('close', () => { clearTimeout(demoTimer); $('#sheet-body').innerHTML = ''; });
     function openProject(id) {
         const p = P.find((x) => x.id === id);
         if (!p) return;
@@ -78,11 +97,13 @@
                 <p class="sheet-hook">${esc(p.hook)}</p>
                 <p class="sheet-desc">${esc(p.desc)}</p>
                 <ul>${p.points.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>
+                ${demoHTML(p)}
                 <div class="tags">${p.tags.map((t) => `<span>${esc(t)}</span>`).join('')}</div>
                 <div class="links">${p.live ? ext(p.live, 'Open live', 'btn-blue') : ''}${p.repo ? ext(p.repo, 'Source on GitHub') : ''}</div>
             </div>`;
         sheet.showModal();
         sheet.scrollTop = 0;
+        playDemo();
     }
 
     /* ---------- skills ---------- */
@@ -147,8 +168,17 @@
 
     /* ---------- clicks ---------- */
     document.addEventListener('click', (e) => {
-        const t = e.target.closest('[data-project],[data-cert],[data-copy]');
+        const t = e.target.closest('[data-project],[data-cert],[data-copy],[data-video],[data-replay]');
         if (!t) return;
+        if (t.dataset.video) {
+            const f = document.createElement('iframe');
+            f.src = `https://www.youtube-nocookie.com/embed/${t.dataset.video}?autoplay=1&rel=0`;
+            f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+            f.allowFullscreen = true; f.title = 'Project demo video';
+            t.replaceWith(f);
+            return;
+        }
+        if ('replay' in t.dataset) return playDemo();
         if (t.dataset.project) openProject(t.dataset.project);
         else if (t.dataset.cert) openCert(t.dataset.cert);
         else if (t.dataset.copy) copy(t.dataset.copy);
