@@ -107,7 +107,7 @@ h1, h2, h3 { margin: 0; }
 
 /* paint layer: fixed behind everything, never takes clicks */
 #glyphs { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
-main { position: relative; z-index: 1; }
+main { position: relative; }
 
 /* frosted glass, the one surface style used everywhere */
 .glass {
@@ -149,7 +149,7 @@ main { position: relative; z-index: 1; }
     display: grid; place-items: center;
     padding: 100px 16px 160px;
 }
-.hero-inner { position: relative; z-index: 1; width: 100%; max-width: 780px; text-align: center; }
+.hero-inner { position: relative; z-index: 16; width: 100%; max-width: 780px; text-align: center; }
 
 .hello { margin: 0 0 14px; font: 400 clamp(12px, 1.6vw, 15px)/1.6 var(--pixel); color: var(--ink-3); }
 
