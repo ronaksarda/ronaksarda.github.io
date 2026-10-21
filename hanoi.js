@@ -57,9 +57,10 @@
 
     board.addEventListener('click', (e) => {
         const peg = e.target.closest('[data-peg]');
-        if (!peg || auto || solved) return;
+        if (!peg || auto) return;
+        if (solved) { reset(); return; }   // any click after a win starts a fresh game
         const i = Number(peg.dataset.peg);
-        if (sel === null) { if (pegs[i].length) { sel = i; say(`Holding disk ${pegs[i][pegs[i].length - 1]}. Pick where it goes.`); } }
+        if (sel === null) { if (!pegs[i].length) say('That peg is empty. Pick one with disks on it.'); else { sel = i; say(`Holding disk ${pegs[i][pegs[i].length - 1]}. Pick where it goes.`); } }
         else if (sel === i) { sel = null; say('Put it back.'); }
         else {
             const from = sel; sel = null;

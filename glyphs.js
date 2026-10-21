@@ -13,6 +13,7 @@
     let W = 0, H = 0, dpr = 1, cw = 18, chh = 24, cols = 0, rows = 0, field = [];
     let ink = '#71717a', accent = '#0171e3', dark = false;
     let bg = null; // the static field, drawn once per resize / theme change
+    let atlas = {};  // every character pre-rendered in the accent colour, so a ripple is drawImage, not fillText
     const ripples = [];
 
     /* ---------- pixel water ---------- */
@@ -30,7 +31,22 @@
         dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
     }
 
+    function buildAtlas() {
+        atlas = {};
+        for (const ch of CH) {
+            const a = document.createElement('canvas');
+            a.width = Math.ceil(cw * dpr); a.height = Math.ceil(chh * dpr);
+            const x = a.getContext('2d');
+            x.scale(dpr, dpr);
+            x.font = '13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
+            x.textAlign = 'center'; x.textBaseline = 'middle';
+            x.fillStyle = accent; x.fillText(ch, cw / 2, chh / 2);
+            atlas[ch] = a;
+        }
+    }
+
     function paintField() {
+        buildAtlas();
         bg = document.createElement('canvas');
         bg.width = W * dpr; bg.height = H * dpr;
         const b = bg.getContext('2d');
@@ -86,23 +102,37 @@
         ctx.font = '13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
 
-        for (const r0 of ripples) for (const [delay, gain] of [[0, 1], [0.22, 0.55]]) {
-            const r = r0, t = (now - r0.t) / 1000 - delay, rad = t * 380, life = (1 - t / 2.2) * gain;
-            if (t <= 0 || life <= 0) continue;
-            const x0 = Math.max(0, Math.floor((r.x - rad - 60) / cw)), x1 = Math.min(cols - 1, Math.ceil((r.x + rad + 60) / cw));
-            const y0 = Math.max(0, Math.floor((r.y - rad - 60) / chh)), y1 = Math.min(rows - 1, Math.ceil((r.y + rad + 60) / chh));
-            ctx.fillStyle = accent;
-            for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
-                const cx = x * cw + cw / 2, cy = y * chh + chh / 2, d = Math.hypot(cx - r.x, cy - r.y) - rad;
-                const k = Math.exp(-(d * d) / (2 * 28 * 28)) * life;
-                if (k < 0.04) continue;
-                ctx.globalAlpha = 0.12 * k; ctx.fillRect(cx - cw / 2 + 1, cy - chh / 2 + 2, cw - 2, chh - 4);
-                ctx.globalAlpha = Math.min(1, 0.25 + k);
-                ctx.fillText(k > 0.35 && ((now / 90 + x * 7 + y * 3) | 0) % 3 === 0 ? CH[(x * 31 + y * 17 + ((now / 120) | 0)) % CH.length] : field[y * cols + x], cx, cy);
+        const BAND = 46, SIGMA2 = 2 * 22 * 22;
+        ctx.fillStyle = accent; ctx.strokeStyle = accent; ctx.lineWidth = 1.5;
+        ripples.forEach((r, n) => { for (const [delay, gain] of n >= ripples.length - 2 ? [[0, 1], [0.22, 0.5]] : [[0, 1]]) {
+            const t = (now - r.t) / 1000 - delay, rad = t * 420, life = (1 - t / 1.9) * gain;
+            if (t <= 0 || life <= 0.03) continue;
+            const y0 = Math.max(0, Math.floor((r.y - rad - BAND) / chh)), y1 = Math.min(rows - 1, Math.ceil((r.y + rad + BAND) / chh));
+            for (let y = y0; y <= y1; y++) {
+                const cy = y * chh + chh / 2, dy = cy - r.y;
+                // only the cells inside the ring band: x range from the two circles that bound it
+                const outer = Math.sqrt(Math.max(0, (rad + BAND) ** 2 - dy * dy));
+                const innerR = rad - BAND, inner = innerR > Math.abs(dy) ? Math.sqrt(innerR * innerR - dy * dy) : 0;
+                if (outer <= 0) continue;
+                for (const side of inner > 0 ? [-1, 1] : [0]) {
+                    const xa = side === 0 ? r.x - outer : side < 0 ? r.x - outer : r.x + inner;
+                    const xb = side === 0 ? r.x + outer : side < 0 ? r.x - inner : r.x + outer;
+                    const x0 = Math.max(0, Math.floor(xa / cw)), x1 = Math.min(cols - 1, Math.ceil(xb / cw));
+                    for (let x = x0; x <= x1; x++) {
+                        const cx = x * cw + cw / 2, d = Math.hypot(cx - r.x, cy - r.y) - rad;
+                        const k = Math.exp(-(d * d) / SIGMA2) * life;
+                        if (k < 0.1) continue;
+                        const al = Math.round((0.25 + k) * 6) / 6;       // few alpha levels, cheap state changes
+                        if (gain === 1 && k > 0.45) { ctx.globalAlpha = 0.12; ctx.fillRect(cx - cw / 2 + 1, cy - chh / 2 + 2, cw - 2, chh - 4); }
+                        ctx.globalAlpha = Math.min(1, al);
+                        const flick = k > 0.35 && ((now / 90 + x * 7 + y * 3) | 0) % 3 === 0;
+                        const ch = flick ? CH[(x * 31 + y * 17 + ((now / 120) | 0)) % CH.length] : field[y * cols + x];
+                        ctx.drawImage(atlas[ch], cx - cw / 2, cy - chh / 2, cw, chh);
+                    }
+                }
             }
-            ctx.globalAlpha = 0.28 * life; ctx.strokeStyle = accent; ctx.lineWidth = 1.5;
-            ctx.beginPath(); ctx.arc(r.x, r.y, rad, 0, 6.2832); ctx.stroke();
-        }
+            if (gain === 1) { ctx.globalAlpha = 0.28 * life; ctx.beginPath(); ctx.arc(r.x, r.y, rad, 0, 6.2832); ctx.stroke(); }
+        } });
 
         for (const [k, c] of water) {
             const age = now - c.born;
@@ -120,7 +150,7 @@
     function frame(now) {
         for (let i = ripples.length - 1; i >= 0; i--) if (now - ripples[i].t > 2400) ripples.splice(i, 1);
         if (now - tickAt > 70) { tickAt = now; tickWater(now); }
-        draw(now);
+        try { draw(now); } catch (e) { ripples.length = 0; water.clear(); active = []; source = null; running = false; ctx.globalAlpha = 1; return; }
         if (ripples.length || water.size || active.length || (source && now < source.until)) requestAnimationFrame(frame);
         else { running = false; draw(now); }
     }
@@ -130,7 +160,7 @@
     addEventListener('pointerdown', (e) => {
         if (reduced) return;
         ripples.push({ x: e.clientX, y: e.clientY, t: performance.now() });
-        if (ripples.length > 8) ripples.shift();
+        if (ripples.length > 3) ripples.shift();
         wake();
     }, { passive: true, capture: true });
     addEventListener('pointermove', (e) => {

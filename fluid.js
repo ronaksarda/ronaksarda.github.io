@@ -11,11 +11,11 @@
     const small = Math.min(innerWidth, innerHeight) < 700;
     const config = {
         SIM_RESOLUTION: 128,
-        DYE_RESOLUTION: small ? 720 : 1440,
+        DYE_RESOLUTION: small ? 512 : 1024,
         DENSITY_DISSIPATION: 0.45,
         VELOCITY_DISSIPATION: 1.6,
         PRESSURE: 0.8,
-        PRESSURE_ITERATIONS: 20,
+        PRESSURE_ITERATIONS: 14,
         CURL: 2,
         SPLAT_RADIUS: 0.16,
         SPLAT_FORCE: 5000,
@@ -388,7 +388,7 @@
     }
     function burst(x, y, big) {
         wake();
-        for (let i = 0; i < (big ? 6 : 3); i++) {
+        for (let i = 0; i < (big ? 3 : 2); i++) {
             const a = Math.random() * 6.283, f = 900 + Math.random() * 900;
             splat(x, y, Math.cos(a) * f, Math.sin(a) * f, ink(hueT + i * 0.35, 1.4));
         }
