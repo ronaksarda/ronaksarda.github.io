@@ -19,7 +19,7 @@
         CURL: 2,
         SPLAT_RADIUS: 0.16,
         SPLAT_FORCE: 5000,
-        INK: 0.26
+        INK: 0.17
     };
 
     const params = { alpha: true, depth: false, stencil: false, antialias: false, preserveDrawingBuffer: false };
@@ -154,7 +154,7 @@
                 vec3 c = texture2D(uTexture, vUv).rgb;
                 float m = max(c.r, max(c.g, c.b));
                 // density -> opacity with a soft shoulder; hue stays saturated, premultiplied for the page behind
-                float a = (1.0 - exp(-m * 2.4)) * 0.9;
+                float a = (1.0 - exp(-m * 2.0)) * 0.62;
                 vec3 hue = m > 0.0001 ? c / m : vec3(0.0);
                 gl_FragColor = vec4(hue * a, a);
             }`

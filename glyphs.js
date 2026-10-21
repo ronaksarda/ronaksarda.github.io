@@ -86,9 +86,9 @@
         ctx.font = '13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
 
-        for (const r of ripples) {
-            const t = (now - r.t) / 1000, rad = t * 380, life = 1 - t / 2.4;
-            if (life <= 0) continue;
+        for (const r0 of ripples) for (const [delay, gain] of [[0, 1], [0.22, 0.55]]) {
+            const r = r0, t = (now - r0.t) / 1000 - delay, rad = t * 380, life = (1 - t / 2.2) * gain;
+            if (t <= 0 || life <= 0) continue;
             const x0 = Math.max(0, Math.floor((r.x - rad - 60) / cw)), x1 = Math.min(cols - 1, Math.ceil((r.x + rad + 60) / cw));
             const y0 = Math.max(0, Math.floor((r.y - rad - 60) / chh)), y1 = Math.min(rows - 1, Math.ceil((r.y + rad + 60) / chh));
             ctx.fillStyle = accent;
@@ -128,9 +128,11 @@
 
     /* ---------- input ---------- */
     addEventListener('pointerdown', (e) => {
-        if (e.target.closest('a, button, input, textarea, dialog, .hanoi')) return;
-        if (!reduced) { ripples.push({ x: e.clientX, y: e.clientY, t: performance.now() }); if (ripples.length > 5) ripples.shift(); wake(); }
-    }, { passive: true });
+        if (reduced) return;
+        ripples.push({ x: e.clientX, y: e.clientY, t: performance.now() });
+        if (ripples.length > 8) ripples.shift();
+        wake();
+    }, { passive: true, capture: true });
     addEventListener('pointermove', (e) => {
         if (reduced || e.pointerType === 'touch') return;
         const now = performance.now();
