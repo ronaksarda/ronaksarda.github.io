@@ -383,12 +383,11 @@
         const aspect = canvas.width / canvas.height;
         pointer.dx = (x - pointer.px) * (aspect < 1 ? aspect : 1);
         pointer.dy = (y - pointer.py) / (aspect > 1 ? aspect : 1);
-        pointer.moved = Math.abs(pointer.dx) + Math.abs(pointer.dy) > 0;
+        pointer.moved = pointer.moved || Math.abs(pointer.dx) + Math.abs(pointer.dy) > 0;
         // colour advances with distance travelled, so a stroke fades from one hue into the next
         hueT += (Math.abs(pointer.dx) + Math.abs(pointer.dy)) * 2.2;
         wake();
     }
-    addEventListener('pointermove', (e) => { if (e.pointerType !== 'touch') move(e.clientX, e.clientY); }, { passive: true });
     // moving paints; clicking and tapping do not (the ripple layer handles clicks)
     addEventListener('pointermove', (e) => { if (e.pointerType !== 'touch') move(e.clientX, e.clientY); }, { passive: true });
     // fingers paint while they drag; scrolling still works because these listeners are passive

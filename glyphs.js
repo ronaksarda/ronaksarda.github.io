@@ -17,7 +17,10 @@
 
     let W = 0, H = 0, dpr = 1, cw = 18, chh = 24, cols = 0, rows = 0, field = [];
     let ink = '#71717a', accent = '#0171e3', dark = false;
-    let atlas = {};            // each character pre-rendered in the accent colour: a ripple is drawImage, not fillText
+    // pink -> violet -> cyan -> mint -> amber -> coral, blended into 12 steps. A ripple runs through all of them.
+    const BASE = [[255, 95, 162], [160, 107, 255], [56, 200, 240], [52, 214, 176], [255, 179, 71], [255, 122, 89]];
+    const AURORA = BASE.flatMap((c, i) => { const n = BASE[(i + 1) % BASE.length]; return [c, c.map((v, k) => Math.round((v + n[k]) / 2))]; }).map((c) => `rgb(${c})`);
+    let atlas = [];            // atlas[colour][char]: every character pre-rendered, so a ripple is drawImage, not fillText
     const ripples = [];
     let raf = 0;               // pending animation frame id; 0 means the loop is asleep
 
@@ -25,7 +28,7 @@
     const WS = 14;             // block size in px
     let wc = 0, wr = 0, active = [], source = null, lastWater = 0, tickAt = 0;
     const water = new Map();   // "x,y" -> { lvl, born, ch, shade }
-    const SHADES = ['#1d6fe0', '#2f8cff', '#4aa3ff', '#2bb3c9'];
+    const SHADES = ['#38c8f0', '#34d6b0', '#a06bff', '#5ea8ff'];
     const LIFE = 6500;
 
     function colors() {
@@ -36,16 +39,19 @@
     }
 
     function buildAtlas() {
-        atlas = {};
-        for (const ch of CH) {
-            const a = document.createElement('canvas');
-            a.width = Math.ceil(cw * dpr); a.height = Math.ceil(chh * dpr);
-            const x = a.getContext('2d');
-            x.scale(dpr, dpr);
-            x.font = `13px ${FONT}`; x.textAlign = 'center'; x.textBaseline = 'middle';
-            x.fillStyle = accent; x.fillText(ch, cw / 2, chh / 2);
-            atlas[ch] = a;
-        }
+        atlas = AURORA.map((col) => {
+            const set = {};
+            for (const ch of CH) {
+                const a = document.createElement('canvas');
+                a.width = Math.ceil(cw * dpr); a.height = Math.ceil(chh * dpr);
+                const x = a.getContext('2d');
+                x.scale(dpr, dpr);
+                x.font = `600 13px ${FONT}`; x.textAlign = 'center'; x.textBaseline = 'middle';
+                x.fillStyle = col; x.fillText(ch, cw / 2, chh / 2);
+                set[ch] = a;
+            }
+            return set;
+        });
     }
 
     function paintField() {
@@ -78,7 +84,7 @@
     }
     function tickWater(now) {
         const cur = active; active = [];   // new cells wait for the next tick, so the flow advances one step at a time
-        if (source && now < source.until) put(source.x, source.y, 7, now);
+        if (source && now < source.until) for (let dx = -2; dx <= 2; dx++) put(source.x + dx, source.y, 7, now);
         for (const [x, y, lvl] of cur) {
             // fall first, then spread sideways one level weaker, like the real thing
             if (y + 1 < wr && !water.has(key(x, y + 1))) { put(x, y + 1, 7, now); continue; }
@@ -91,7 +97,6 @@
     function draw(now) {
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         ctx.clearRect(0, 0, W, H);
-        ctx.fillStyle = accent; ctx.strokeStyle = accent; ctx.lineWidth = 1.5;
 
         ripples.forEach((r, n) => {
             // the two newest ripples get a softer echo wave behind the leading ring
@@ -113,15 +118,16 @@
                             const cx = x * cw + cw / 2, d = Math.hypot(cx - r.x, cy - r.y) - rad;
                             const k = Math.exp(-(d * d) / SIGMA2) * life;
                             if (k < 0.1) continue;
-                            if (gain === 1 && k > 0.45) { ctx.globalAlpha = 0.1; ctx.fillRect(cx - cw / 2 + 1, cy - chh / 2 + 2, cw - 2, chh - 4); }
+                            // colour runs around the ring and drifts outward as it grows
+                            const ci = ((Math.floor(Math.atan2(cy - r.y, cx - r.x) / 6.2832 * 12 + rad / 150 + r.h) % 12) + 12) % 12;
+                            if (gain === 1 && k > 0.45) { ctx.globalAlpha = 0.1; ctx.fillStyle = AURORA[ci]; ctx.fillRect(cx - cw / 2 + 1, cy - chh / 2 + 2, cw - 2, chh - 4); }
                             ctx.globalAlpha = Math.min(1, Math.round((0.3 + k) * 6) / 6);
                             const flick = k > 0.35 && ((now / 90 + x * 7 + y * 3) | 0) % 3 === 0;
                             const ch = flick ? CH[(x * 31 + y * 17 + ((now / 120) | 0)) % CH.length] : field[y * cols + x];
-                            ctx.drawImage(atlas[ch], cx - cw / 2, cy - chh / 2, cw, chh);
+                            ctx.drawImage(atlas[ci][ch], cx - cw / 2, cy - chh / 2, cw, chh);
                         }
                     }
                 }
-                if (gain === 1) { ctx.globalAlpha = 0.5 * life; ctx.beginPath(); ctx.arc(r.x, r.y, rad, 0, 6.2832); ctx.stroke(); }
             }
         });
 
@@ -133,7 +139,7 @@
             const a = Math.min(1, age / 120) * Math.pow(1 - age / LIFE, 1.3);
             ctx.globalAlpha = 0.85 * a * (0.55 + c.lvl / 16);
             ctx.fillStyle = c.shade; ctx.fillRect(x * WS, y * WS, WS - 1, WS - 1);
-            ctx.globalAlpha = a * 0.9; ctx.fillStyle = '#e8f3ff';
+            ctx.globalAlpha = a * 0.9; ctx.fillStyle = '#ffffff';
             ctx.fillText(c.ch, x * WS + WS / 2, y * WS + WS / 2 + 1);
         }
         ctx.globalAlpha = 1;
@@ -154,7 +160,7 @@
     // capture phase on window: runs before anything on the page can stop the event
     addEventListener('pointerdown', (e) => {
         if (reduced) return;
-        ripples.push({ x: e.clientX, y: e.clientY, t: performance.now() });
+        ripples.push({ x: e.clientX, y: e.clientY, t: performance.now(), h: (Math.random() * 12) | 0 });
         if (ripples.length > 3) ripples.shift();
         wake();
     }, { passive: true, capture: true });
