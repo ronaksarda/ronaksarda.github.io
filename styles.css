@@ -106,7 +106,7 @@ h1, h2, h3 { margin: 0; }
 .skip:focus { top: 12px; }
 
 /* paint layer: fixed behind everything, never takes clicks */
-#fluid, #glyphs { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+#glyphs { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
 main { position: relative; z-index: 1; }
 
 /* frosted glass, the one surface style used everywhere */
@@ -515,3 +515,9 @@ h1 { margin: 0 0 30px; font: 400 clamp(26px, 4.6vw, 46px)/1.3 var(--pixel); text
 #fx { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 15; pointer-events: none; mix-blend-mode: multiply; }
 :root[data-theme="dark"] #fx { mix-blend-mode: screen; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #fx { mix-blend-mode: screen; } }
+
+/* the ink also draws above the content, so it is visible over panels and cards, not only in the gaps.
+   multiply tints white without touching dark text; screen makes it glow on dark */
+#fluid { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 14; pointer-events: none; mix-blend-mode: multiply; }
+:root[data-theme="dark"] #fluid { mix-blend-mode: screen; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) #fluid { mix-blend-mode: screen; } }
