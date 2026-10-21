@@ -141,7 +141,7 @@ window.SITE = {
         },
         {
             id: 'janitor', tone: 'ink', name: 'Downloads Janitor', kicker: 'reversible file sorter', cat: ['systems'],
-            repo: 'https://github.com/ronaksarda/document-janitor', viz: 'robot',
+            repo: 'https://github.com/ronaksarda/document-janitor', viz: 'robot', img: 'assets/projects/janitor.jpg',
             hook: 'A clay robot sorts your messy Downloads folder in front of you.',
             desc: 'Non-destructive and deterministic. Every move goes in an append-only journal and can be undone byte for byte.',
             tags: ['Python', 'SVG animation', 'File I/O'],

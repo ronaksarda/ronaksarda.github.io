@@ -1,8 +1,8 @@
-// Living ink behind the page: a small stable-fluids simulation on WebGL.
+// Ink that follows the cursor: a small stable-fluids simulation on WebGL.
 // Technique after Pavel Dobryakov's WebGL Fluid Simulation (MIT).
-// Drag (mouse or finger) to paint, click or tap for a burst, scroll to stir it,
-// and two slow currents keep it moving on their own. Colour drifts along a fixed palette
-// as you move, so a stroke is one smooth gradient instead of random hues.
+// Move (mouse or finger) to paint, click or tap for a burst. Scrolling does nothing to it.
+// Colour drifts along a fixed palette as you move, so a stroke is one smooth gradient,
+// and the ink fades out slowly on its own. The loop sleeps once everything has faded.
 (() => {
     if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const canvas = document.getElementById('fluid');
@@ -12,14 +12,14 @@
     const config = {
         SIM_RESOLUTION: 128,
         DYE_RESOLUTION: small ? 720 : 1440,
-        DENSITY_DISSIPATION: 0.9,
-        VELOCITY_DISSIPATION: 2.2,
+        DENSITY_DISSIPATION: 0.45,
+        VELOCITY_DISSIPATION: 1.6,
         PRESSURE: 0.8,
         PRESSURE_ITERATIONS: 20,
-        CURL: 14,
+        CURL: 2,
         SPLAT_RADIUS: 0.16,
         SPLAT_FORCE: 5000,
-        INK: 0.3
+        INK: 0.26
     };
 
     const params = { alpha: true, depth: false, stencil: false, antialias: false, preserveDrawingBuffer: false };
@@ -384,66 +384,53 @@
         pointer.moved = Math.abs(pointer.dx) + Math.abs(pointer.dy) > 0;
         // colour advances with distance travelled, so a stroke fades from one hue into the next
         hueT += (Math.abs(pointer.dx) + Math.abs(pointer.dy)) * 2.2;
+        wake();
     }
     function burst(x, y, big) {
+        wake();
         for (let i = 0; i < (big ? 6 : 3); i++) {
             const a = Math.random() * 6.283, f = 900 + Math.random() * 900;
             splat(x, y, Math.cos(a) * f, Math.sin(a) * f, ink(hueT + i * 0.35, 1.4));
         }
     }
     addEventListener('pointermove', (e) => { if (e.pointerType !== 'touch') move(e.clientX, e.clientY); }, { passive: true });
+    const interactive = (e) => e.target.closest && e.target.closest('a, button, input, dialog, .hanoi');
     addEventListener('pointerdown', (e) => {
-        if (e.pointerType === 'touch') return;
+        if (e.pointerType === 'touch' || interactive(e)) return;
         move(e.clientX, e.clientY);
         burst(pointer.x, pointer.y, true);
     }, { passive: true });
     // fingers paint too; scrolling still works because these listeners are passive
     addEventListener('touchstart', (e) => {
+        if (interactive(e)) return;
         const t = e.touches[0];
         pointer.seen = false; move(t.clientX, t.clientY);
         burst(pointer.x, pointer.y, false);
     }, { passive: true });
     addEventListener('touchmove', (e) => { const t = e.touches[0]; move(t.clientX, t.clientY); }, { passive: true });
 
-    // scrolling stirs the ink: the faster you scroll, the stronger the current
-    let lastY = scrollY, scrollKick = 0;
-    addEventListener('scroll', () => {
-        const d = scrollY - lastY; lastY = scrollY;
-        scrollKick = Math.max(-1, Math.min(1, scrollKick + d / 400));
-    }, { passive: true });
-
     /* ---------- loop ---------- */
-    let last = performance.now(), clock = 0;
+    let last = performance.now(), lastInput = 0, running = false;
     function frame(now) {
         const dt = Math.min((now - last) / 1000, 0.016666);
-        last = now; clock += dt;
+        last = now;
         if (resize()) initBuffers();
 
         if (pointer.moved) {
             pointer.moved = false;
             splat(pointer.x, pointer.y, pointer.dx * config.SPLAT_FORCE, pointer.dy * config.SPLAT_FORCE, ink(hueT));
         }
-
-        if (Math.abs(scrollKick) > 0.02) {
-            const k = scrollKick; scrollKick *= 0.85;
-            for (let i = 0; i < 2; i++) splat(Math.random(), 0.5 + (Math.random() - 0.5) * 0.6, (Math.random() - 0.5) * 400, k * -2400, ink(hueT + i, 0.6));
-        } else scrollKick = 0;
-
-        // two slow currents so the page never looks dead; faint on purpose
-        if (Math.floor(clock * 30) !== Math.floor((clock - dt) * 30)) {
-            for (let i = 0; i < 2; i++) {
-                const p = clock * 0.18 + i * 3.1;
-                const x = 0.5 + 0.42 * Math.sin(p * 1.3 + i), y = 0.5 + 0.38 * Math.sin(p * 0.9 + i * 2);
-                const vx = Math.cos(p * 1.3 + i) * 90, vy = Math.cos(p * 0.9 + i * 2) * 70;
-                splat(x, y, vx, vy, ink(clock * 0.12 + i * 2, 0.18));
-            }
-        }
-
         step(dt);
         render();
+
+        // the ink fades by itself; once it is gone the loop stops until the next input
+        if (now - lastInput > 14000) { running = false; return; }
         requestAnimationFrame(frame);
     }
-    // rAF already stops in hidden tabs; reset the clock so the first frame back is not a huge step
-    document.addEventListener('visibilitychange', () => { last = performance.now(); });
-    requestAnimationFrame(frame);
+    function wake() {
+        lastInput = performance.now();
+        if (running) return;
+        running = true; last = performance.now();
+        requestAnimationFrame(frame);
+    }
 })();
