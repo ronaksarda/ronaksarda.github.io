@@ -1,6 +1,6 @@
 // Ink that follows the cursor: a small stable-fluids simulation on WebGL.
 // Technique after Pavel Dobryakov's WebGL Fluid Simulation (MIT).
-// Move (mouse or finger) to paint, click or tap for a burst. Scrolling does nothing to it.
+// Move (mouse or finger) to paint. Clicking and scrolling do nothing to it.
 // Colour drifts along a fixed palette as you move, so a stroke is one smooth gradient,
 // and the ink fades out slowly on its own. The loop sleeps once everything has faded.
 (() => {
@@ -149,12 +149,12 @@
                 vec2 v = texture2D(uVelocity, vUv).xy - vec2(R - L, T - B);
                 gl_FragColor = vec4(v, 0.0, 1.0);
             }`,
-        display: `uniform sampler2D uTexture;
+        display: `uniform sampler2D uTexture; uniform float uStrength;
             void main () {
                 vec3 c = texture2D(uTexture, vUv).rgb;
                 float m = max(c.r, max(c.g, c.b));
                 // density -> opacity with a soft shoulder; hue stays saturated, premultiplied for the page behind
-                float a = (1.0 - exp(-m * 2.0)) * 0.62;
+                float a = (1.0 - exp(-m * 2.0)) * uStrength;
                 vec3 hue = m > 0.0001 ? c / m : vec3(0.0);
                 gl_FragColor = vec4(hue * a, a);
             }`
@@ -336,10 +336,12 @@
         blit(dye.write); dye.swap();
     }
 
+    const isDark = () => document.documentElement.dataset.theme ? document.documentElement.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
     function render() {
         const p = progs.display; p.use();
         gl.uniform2f(p.u.texelSize, 1 / gl.drawingBufferWidth, 1 / gl.drawingBufferHeight);
         gl.uniform1i(p.u.uTexture, dye.read.attach(0));
+        gl.uniform1f(p.u.uStrength, isDark() ? 0.6 : 0.8);
         blit(null);
     }
 
@@ -386,27 +388,11 @@
         hueT += (Math.abs(pointer.dx) + Math.abs(pointer.dy)) * 2.2;
         wake();
     }
-    function burst(x, y, big) {
-        wake();
-        for (let i = 0; i < (big ? 3 : 2); i++) {
-            const a = Math.random() * 6.283, f = 900 + Math.random() * 900;
-            splat(x, y, Math.cos(a) * f, Math.sin(a) * f, ink(hueT + i * 0.35, 1.4));
-        }
-    }
     addEventListener('pointermove', (e) => { if (e.pointerType !== 'touch') move(e.clientX, e.clientY); }, { passive: true });
-    const interactive = (e) => e.target.closest && e.target.closest('a, button, input, dialog, .hanoi');
-    addEventListener('pointerdown', (e) => {
-        if (e.pointerType === 'touch' || interactive(e)) return;
-        move(e.clientX, e.clientY);
-        burst(pointer.x, pointer.y, true);
-    }, { passive: true });
-    // fingers paint too; scrolling still works because these listeners are passive
-    addEventListener('touchstart', (e) => {
-        if (interactive(e)) return;
-        const t = e.touches[0];
-        pointer.seen = false; move(t.clientX, t.clientY);
-        burst(pointer.x, pointer.y, false);
-    }, { passive: true });
+    // moving paints; clicking and tapping do not (the ripple layer handles clicks)
+    addEventListener('pointermove', (e) => { if (e.pointerType !== 'touch') move(e.clientX, e.clientY); }, { passive: true });
+    // fingers paint while they drag; scrolling still works because these listeners are passive
+    addEventListener('touchstart', (e) => { const t = e.touches[0]; pointer.seen = false; move(t.clientX, t.clientY); }, { passive: true });
     addEventListener('touchmove', (e) => { const t = e.touches[0]; move(t.clientX, t.clientY); }, { passive: true });
 
     /* ---------- loop ---------- */
