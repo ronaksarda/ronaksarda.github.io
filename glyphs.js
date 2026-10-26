@@ -119,7 +119,7 @@
     /* ---------- input ---------- */
     // capture phase on window: runs before anything on the page can stop the event
     addEventListener('pointerdown', (e) => {
-        if (reduced) return;
+        if (reduced || (e.target instanceof Element && e.target.closest('#play'))) return;   // no colour over the game
         ripples.push({ x: e.clientX, y: e.clientY, t: performance.now(), h: (Math.random() * 12) | 0 });
         if (ripples.length > 3) ripples.shift();
         wake();

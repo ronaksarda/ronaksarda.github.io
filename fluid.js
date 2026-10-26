@@ -375,6 +375,24 @@
     /* ---------- input ---------- */
     const pointer = { x: 0, y: 0, px: 0, py: 0, dx: 0, dy: 0, moved: false, seen: false };
 
+    // paint is off until the visitor asks for it: the C key or the header button toggles it
+    const root = document.documentElement, btn = document.getElementById('paint');
+    const paintOn = () => root.dataset.paint === 'on';
+    function togglePaint() {
+        if (paintOn()) delete root.dataset.paint; else root.dataset.paint = 'on';
+        btn.setAttribute('aria-pressed', paintOn());
+        pointer.seen = false;   // no streak from wherever the cursor was when paint went off
+    }
+    btn.hidden = false;
+    btn.addEventListener('click', togglePaint);
+    addEventListener('keydown', (e) => {
+        if (e.key.toLowerCase() !== 'c' || e.ctrlKey || e.metaKey || e.altKey || e.repeat) return;
+        if (e.target instanceof Element && e.target.closest('input, textarea, select, [contenteditable]')) return;
+        togglePaint();
+    });
+    // never paint over the Tower of Hanoi
+    const canPaint = (e) => paintOn() && !(e.target instanceof Element && e.target.closest('#play'));
+
     function move(cx, cy) {
         const x = (cx * scale) / canvas.width, y = 1 - (cy * scale) / canvas.height;
         if (!pointer.seen) { pointer.x = x; pointer.y = y; pointer.seen = true; }
@@ -389,10 +407,10 @@
         wake();
     }
     // moving paints; clicking and tapping do not (the ripple layer handles clicks)
-    addEventListener('pointermove', (e) => { if (e.pointerType !== 'touch') move(e.clientX, e.clientY); }, { passive: true });
+    addEventListener('pointermove', (e) => { if (e.pointerType !== 'touch' && canPaint(e)) move(e.clientX, e.clientY); }, { passive: true });
     // fingers paint while they drag; scrolling still works because these listeners are passive
-    addEventListener('touchstart', (e) => { const t = e.touches[0]; pointer.seen = false; move(t.clientX, t.clientY); }, { passive: true });
-    addEventListener('touchmove', (e) => { const t = e.touches[0]; move(t.clientX, t.clientY); }, { passive: true });
+    addEventListener('touchstart', (e) => { if (!canPaint(e)) return; const t = e.touches[0]; pointer.seen = false; move(t.clientX, t.clientY); }, { passive: true });
+    addEventListener('touchmove', (e) => { if (!canPaint(e)) return; const t = e.touches[0]; move(t.clientX, t.clientY); }, { passive: true });
 
     /* ---------- loop ---------- */
     let last = performance.now(), lastInput = 0, running = false;

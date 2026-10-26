@@ -34,7 +34,8 @@
     $('#about-body').innerHTML = `
         <div class="about-text">
             <p class="lead">I'm Ronak, a second-year IT student at CBIT Hyderabad and the founding AI engineering intern at <b>FschoolAI</b>.</p>
-            <p>Most of my work is AI agents and RAG pipelines, plus C++ when something has to be fast: ranking 100,000 candidates on one CPU, holding 60 FPS without WebGL, keeping a vision LLM honest.</p>
+            <p>Most of my work is AI agents that do real things on real machines: Mr. Couch runs chores on your laptop behind a permission checklist, Ideator walks a knowledge graph of competitors, and Candidate Ranker ranks 100,000 people on one CPU. C++ comes out when something has to be fast.</p>
+            <p>Right now I'm building <b>Star</b>, an AI agent for your watch. Think Baymax, but on your wrist.</p>
             <p>Technical member of the HICON and AWS clubs at CBIT and a member of GDG Hyderabad. CS50x graduate, HackerRank Gold in C and C++.</p>
         </div>
         <dl class="facts">${S.facts.map((f) => `<div><dt>${esc(f.big)}</dt><dd>${esc(f.label)}</dd></div>`).join('')}</dl>`;

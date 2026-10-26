@@ -130,6 +130,13 @@ main { position: relative; }
 .top-actions { margin-left: auto; display: flex; align-items: center; gap: 6px; }
 .top-link { text-decoration: none; font-weight: 600; font-size: 15px; padding: 8px 14px; border-radius: 999px; }
 .top-link:hover { background: var(--surface-2); }
+.paint-btn { font: inherit; font-weight: 600; font-size: 14px; color: inherit; border: 1px solid var(--line, currentColor); background: none; padding: 7px 12px; border-radius: 999px; cursor: pointer; }
+.paint-btn[hidden] { display: none; }
+.paint-btn:hover { background: var(--surface-2); }
+.paint-btn[aria-pressed="true"] { background: var(--surface-2); }
+.paint-btn kbd { font: 600 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; padding: 1px 6px; border-radius: 5px; border: 1px solid currentColor; }
+:root:not([data-paint="on"]) #fluid { opacity: 0; }
+#fluid { transition: opacity .4s; }
 
 .icon-btn { width: 40px; height: 40px; display: grid; place-items: center; border: 0; background: none; border-radius: 50%; }
 .icon-btn:hover { background: var(--surface-2); }

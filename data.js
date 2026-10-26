@@ -45,6 +45,35 @@ window.SITE = {
 
     projects: [
         {
+            id: 'couch', tone: 'brick', name: 'Mr. Couch', kicker: 'desktop AI agent with a personality', cat: ['ai', 'systems'],
+            repo: 'https://github.com/ronaksarda/couch', img: 'https://raw.githubusercontent.com/ronaksarda/couch/main/screenshots/00-cover.png',
+            video: '06nU40L9qhY',
+            hook: 'A lazy, slightly rude roommate in the corner of your screen. He does your chores anyway.',
+            desc: 'Voice or text agent for Windows. Gemma 4 plans each request; a checklist in code decides what it may actually do.',
+            tags: ['TypeScript', 'Electron', 'Gemma 4', 'Mastra', 'ElevenLabs'],
+            points: [
+                'Opens files, plays YouTube, reads the screen, sets reminders, takes notes and drives lights, plugs and AC.',
+                'Every plan passes a tiered policy in code: read-only runs, changes need a tap on Yes, deleting or paying does not exist.',
+                'The model never sees real file paths or device addresses. File names and web pages are data, never instructions.',
+                'Hand-drawn in code with no image files. Insult him twice and the couch is closed until you say sorry.'
+            ]
+        },
+        {
+            id: 'ideator', tone: 'moss', name: 'Ideator', kicker: 'startup idea vs. the real market', cat: ['ai', 'web'],
+            repo: 'https://github.com/ronaksarda/ideator', viz: 'graph',
+            video: 'BAruAQ9rAyY',
+            hook: 'Pitch an idea. An agent walks a knowledge graph of real competitors to find the gap.',
+            desc: 'Live searches feed a FalkorDB graph. A Gemma agent works through it with MCP tools and saves its decision, linked to the evidence behind it.',
+            tags: ['Python', 'FalkorDB', 'MCP', 'Gemma', 'SerpApi'],
+            demo: ['Example idea in: "an app that splits grocery bills"', 'Search: Google results, Google Play apps and prices, Reddit complaints, in parallel', 'Graph: companies, prices, features and complaints written with MERGE, similar features linked SIMILAR_TO', 'Agent loop: lists graph tools over MCP, picks one per step, reads the result, repeats', 'record_decision: writes a Decision node linked to its evidence', '=Opening found, with every claim traceable to the graph'],
+            points: [
+                'Three live searches at once: competitors, Google Play names, ratings and prices, and Reddit complaints.',
+                'Everything lands in a FalkorDB graph, one per user session, using parameterized MERGE queries.',
+                'The agent picks one MCP graph tool per step and streams its reasoning to the UI in plain words.',
+                'The final decision is stored in the graph, linked to the evidence behind it.'
+            ]
+        },
+        {
             id: 'gitspace', tone: 'night', name: 'GitSpace', kicker: 'developer universe', cat: ['web', 'systems'], wide: true, live: 'https://gitspace.me',
             repo: 'https://github.com/ronaksarda/GitSpace', viz: 'gif',
             hook: 'Your GitHub universe as a galaxy you can fly through.',
@@ -71,16 +100,17 @@ window.SITE = {
             ]
         },
         {
-            id: 'grantanchor', tone: 'ink', name: 'GrantAnchor', kicker: 'grant compliance with memory', cat: ['ai', 'web'], team: true,
-            repo: 'https://github.com/ronaksarda/microsoft-hindsight', viz: 'budget',
-            hook: 'Checks every expense against the grant rules before the money goes out.',
-            desc: 'And it learns. Stopped payments, funder approvals and surprise invoices go into Hindsight memory, so month nine is sharper than day one.',
-            tags: ['Python', 'Hindsight memory', 'LLM agents', 'Rules engine'],
+            id: 'alreadybuilt', tone: 'plum', name: 'Already Built?', kicker: 'competitor research for ideas', cat: ['ai', 'web'],
+            repo: 'https://github.com/ronaksarda/already-built', viz: 'quadrant',
+            hook: 'Describe your idea, find out who already built it, and where the gap is.',
+            desc: 'Searches GitHub, Hugging Face and Hacker News, ranks results with local embeddings, and maps competitors onto a 2D market quadrant.',
+            tags: ['Python', 'Embeddings', 'Gemma', 'Hugging Face'],
+            demo: ['Type or speak the product idea', 'Search GitHub, Hugging Face Spaces and Models, and Show HN', 'Rank candidates locally with open-weight embeddings', 'Place every competitor on a 2D market quadrant', '=Grounded breakdown of what exists and which gaps are left open'],
             points: [
-                'Checks each expense against grant rules and against everything the team already spent.',
-                'Memory changes the answer: "Maya\'s last two invoices came in ~50% higher, this takes travel to 84%."',
-                'Recalls past funder approvals and offers the reference in one click.',
-                'Memory can warn or help, never approve or block. The grant rules always decide.'
+                'Seven-stage pipeline from idea to a grounded competitive breakdown.',
+                'Local semantic vector ranking, no hosted embedding API.',
+                'Offline demo mode with a recorded result for instant playback.',
+                'Packaged as a reusable agent skill.'
             ]
         },
         {
@@ -97,18 +127,16 @@ window.SITE = {
             ]
         },
         {
-            id: 'ideator', tone: 'moss', name: 'Ideator', kicker: 'startup idea vs. the real market', cat: ['ai', 'web'],
-            repo: 'https://github.com/ronaksarda/ideator', viz: 'graph',
-            video: 'BAruAQ9rAyY',
-            hook: 'Pitch an idea. An agent walks a knowledge graph of real competitors to find the gap.',
-            desc: 'Live searches feed a FalkorDB graph. A Gemma agent works through it with MCP tools and saves its decision, linked to the evidence behind it.',
-            tags: ['Python', 'FalkorDB', 'MCP', 'Gemma', 'SerpApi'],
-            demo: ['Example idea in: "an app that splits grocery bills"', 'Search: Google results, Google Play apps and prices, Reddit complaints, in parallel', 'Graph: companies, prices, features and complaints written with MERGE, similar features linked SIMILAR_TO', 'Agent loop: lists graph tools over MCP, picks one per step, reads the result, repeats', 'record_decision: writes a Decision node linked to its evidence', '=Opening found, with every claim traceable to the graph'],
+            id: 'grantanchor', tone: 'ink', name: 'GrantAnchor', kicker: 'grant compliance with memory', cat: ['ai', 'web'], team: true,
+            repo: 'https://github.com/ronaksarda/microsoft-hindsight', viz: 'budget',
+            hook: 'Checks every expense against the grant rules before the money goes out.',
+            desc: 'And it learns. Stopped payments, funder approvals and surprise invoices go into Hindsight memory, so month nine is sharper than day one.',
+            tags: ['Python', 'Hindsight memory', 'LLM agents', 'Rules engine'],
             points: [
-                'Three live searches at once: competitors, Google Play names, ratings and prices, and Reddit complaints.',
-                'Everything lands in a FalkorDB graph, one per user session, using parameterized MERGE queries.',
-                'The agent picks one MCP graph tool per step and streams its reasoning to the UI in plain words.',
-                'The final decision is stored in the graph, linked to the evidence behind it.'
+                'Checks each expense against grant rules and against everything the team already spent.',
+                'Memory changes the answer: "Maya\'s last two invoices came in ~50% higher, this takes travel to 84%."',
+                'Recalls past funder approvals and offers the reference in one click.',
+                'Memory can warn or help, never approve or block. The grant rules always decide.'
             ]
         },
         {
@@ -123,20 +151,6 @@ window.SITE = {
                 'Route scoring through OSRM geometry, evaluated every 500 m and adjusted for elapsed travel time.',
                 'Offline service worker, SMS fallback, and a hold-to-record SOS mode with duress protection.',
                 'Authority dashboard for municipal monitoring.'
-            ]
-        },
-        {
-            id: 'alreadybuilt', tone: 'plum', name: 'Already Built?', kicker: 'competitor research for ideas', cat: ['ai', 'web'],
-            repo: 'https://github.com/ronaksarda/already-built', viz: 'quadrant',
-            hook: 'Describe your idea, find out who already built it, and where the gap is.',
-            desc: 'Searches GitHub, Hugging Face and Hacker News, ranks results with local embeddings, and maps competitors onto a 2D market quadrant.',
-            tags: ['Python', 'Embeddings', 'Gemma', 'Hugging Face'],
-            demo: ['Type or speak the product idea', 'Search GitHub, Hugging Face Spaces and Models, and Show HN', 'Rank candidates locally with open-weight embeddings', 'Place every competitor on a 2D market quadrant', '=Grounded breakdown of what exists and which gaps are left open'],
-            points: [
-                'Seven-stage pipeline from idea to a grounded competitive breakdown.',
-                'Local semantic vector ranking, no hosted embedding API.',
-                'Offline demo mode with a recorded result for instant playback.',
-                'Packaged as a reusable agent skill.'
             ]
         },
         {
@@ -167,19 +181,6 @@ window.SITE = {
             ]
         },
         {
-            id: 'docask', tone: 'moss', name: 'doc_ask', kicker: 'local RAG document QA', cat: ['ai', 'web'],
-            repo: 'https://github.com/ronaksarda/doc-ask', viz: 'chat',
-            hook: 'Upload a PDF. Ask it anything. Nothing leaves your laptop.',
-            desc: 'Retrieval-augmented QA over PDF, DOCX and TXT, running fully local on Ollama.',
-            tags: ['Python', 'RAG', 'Ollama', 'pypdf', 'python-docx'],
-            points: [
-                'Full-context RAG: parsed documents are injected into the prompt of a local qwen2.5:1.5b model.',
-                'Handles PDF, DOCX and TXT with multi-encoding fallback.',
-                'Low temperature (0.2) keeps answers grounded in the document.',
-                'Matte black + green Xbox-style UI.'
-            ]
-        },
-        {
             id: 'soulflow', tone: 'night', name: 'SoulFlow', kicker: 'real-time computer vision', cat: ['ai', 'systems'],
             repo: 'https://github.com/ronaksarda/SoulFlow', viz: 'trail',
             hook: 'Draw neon in the air. The UI changes color with your mood.',
@@ -190,27 +191,18 @@ window.SITE = {
                 'Quantized ONNX model classifies facial emotion and recolors the whole HUD.',
                 'Split inference and rendering into separate processes: 25-30 FPS became 45-60 FPS.'
             ]
-        },
-        {
-            id: 'vault', tone: 'ink', name: 'Vault', kicker: 'filesystem file locker', cat: ['systems'], wide: true,
-            repo: 'https://github.com/ronaksarda/Vault', viz: 'vault',
-            hook: 'Lock whole folders with one password. Pure C, zero dependencies.',
-            desc: 'Interactive CLI that groups files into encrypted vaults and treats the filesystem as the source of truth.',
-            tags: ['C', 'Systems programming', 'File I/O', 'gcc'],
-            points: [
-                'Create, open, merge and delete vaults. Lock or unlock every file in one go.',
-                'XOR stream cipher derived from the vault password.',
-                'Metadata mirrors the real filesystem, so no ghost files and no corrupt state.'
-            ]
         }
     ],
 
     hangar: [
+        { name: 'Star', desc: 'An AI agent on your watch. Think Baymax, but on your wrist.', tags: 'AI agent · wearable', progress: 15 },
         { name: 'Pink Verse', desc: 'Cross-platform desktop app in C++ and SFML.', tags: 'C++ · SFML', progress: 45 },
         { name: 'Low-Key Connect', desc: 'Connect through LinkedIn and GitHub, but way more fun.', tags: 'full-stack', progress: 30, repo: 'https://github.com/ronaksarda/Low-Key-Connect' }
     ],
 
     lab: [
+        { name: 'Vault', note: 'C CLI, lock whole folders with one password', repo: 'https://github.com/ronaksarda/Vault' },
+        { name: 'doc_ask', note: 'local RAG over PDF, DOCX and TXT on Ollama', repo: 'https://github.com/ronaksarda/doc-ask' },
         { name: 'AutoSort', note: 'C++ DLL scanner + Python file organiser', repo: 'https://github.com/ronaksarda/AutoSort' },
         { name: 'PotatoLang', note: 'toy language + web playground', repo: 'https://github.com/ronaksarda/potatoLang' },
         { name: 'Vector Canvas', note: 'realtime collab whiteboard, Socket.IO', repo: 'https://github.com/ronaksarda/vector-canvas' },
